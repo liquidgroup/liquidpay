@@ -92,7 +92,7 @@
         spanSubTotal.textContent = "$" + itemsSubTotal.toFixed(2);
         spanTotal.textContent = "$" + itemsTotal.toFixed(2);
         spanCartTotal.textContent = "$" + itemsTotal.toFixed(2);
-        document.getElementById("hidTotalAmount").value = itemsTotal;        
+        document.getElementById("hidTotalAmount").value = itemsTotal;
         return false;
     }
 
@@ -109,6 +109,10 @@
     function getPayloadTypes() {
 
         // Call Retrieve Dynamic QR Payload Types API here to get the list of all supported QR Payload Types
+        // ---------------------------------------------------------------------------------------------------
+        // Please take note that this is for demo purpose only.
+        // It is generally not recommended to use Javascript to call our API as it will expose your secret key
+        // ---------------------------------------------------------------------------------------------------
 
         var jsonData = '{"type":"list","data":[{"payload_code":"GRABPAYQR","name":"GrabPay QR","mode":"C","country_code":"SG","image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/191120022605.png","embedded_image_url":""},{"payload_code":"SCBQR","name":"Thai QR payment","mode":"C","country_code":"TH","image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/191120023616.png","embedded_image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/CTR_191120023617.png"},{"payload_code":"SINGTELDASHQR","name":"Dash QR","mode":"C","country_code":"SG","image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/191120031340.png","embedded_image_url":""}]}'
 
@@ -140,6 +144,10 @@
     function createBill() {
         
         // Call Create Bill API here to create bill and generate QR Code based on selected QR Payload Type
+        // ---------------------------------------------------------------------------------------------------
+        // Please take note that this is for demo purpose only.
+        // It is generally not recommended to use Javascript to call our API as it will expose your secret key
+        // ---------------------------------------------------------------------------------------------------
         
         var jsonData = '{"type": "bill","id": "2020040217264314541342644","bill_ref_no": "Ubm38chMUL8JNiRA0uXq","bill_status": "P","original_currency_code": "SGD","original_amount": 6.66,"final_currency_code": "SGD","final_amount": 6.66,"qr_payload": "00020101021226520008com.grab01369d3e4ba4-f1b9-4f78-827c-a055f0aff40252045411530370254046.665802SG5910ChangiTest6000622907255bcd78d848dcb8f47bcdadfb791480008com.grab07322063f8f937414e58ad728440c5bcde2063041779","created_at": "2020-04-02T17:26:43+08:00","updated_at": "2020-04-02T17:26:43+08:00"}';
         
@@ -153,7 +161,11 @@
 
     function checkBillStatus() {
         
-        // call Retrieve Bill API here to check latest bill status
+        // Call Retrieve Bill API here to check latest bill status
+        // ---------------------------------------------------------------------------------------------------
+        // Please take note that this is for demo purpose only.
+        // It is generally not recommended to use Javascript to call our API as it will expose your secret key
+        // ---------------------------------------------------------------------------------------------------
         
         var jsonData = '{"type": "bill","id": "2020011423292157700050521","payee": "merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0ZXN0IiwibG9jX25vIjoiMSJ9","bill_ref_no": "LQ9lV7I9OtqKcvG5YADA","bill_status": "P","original_currency_code": "SGD","original_amount": 1,"final_currency_code": "SGD","final_amount": 1,"items": null,"created_at": "2020-01-14T23:29:21+08:00","updated_at": "2020-01-14T23:29:24+08:00","print_ref": [],"payload_code": "MERCHANTSCANQR"}';
         
@@ -471,7 +483,7 @@
                         <div class="eight columns alpha omega">
                             <ul class="address-review summary">
                                 <li><strong>Choose Payment Type</strong></li>
-                                <input type="radio" name="PaymentType" id="radCDCard" value="radCDCard" 
+                                <input type="radio" name="PaymentType" id="radCDCard" value="radCDCard"
                                        onclick="ShowContent('creditcardform'); HideContent('payloadTypesList'); HideContent('qrRelatedStuff');" />
                                 Credit / Debit Card
                                 <br>
@@ -526,6 +538,7 @@
 
                                 <div id="payloadTypesList" style="display: none;">
                                     <p>
+                                    <label>QR Code Payment Options:</label>
                                     <select id="payloadTypes" onchange="return changeQrImage();">
                                         <option value="">Please select QR Code options</option>
                                     </select>
@@ -535,7 +548,7 @@
                                 
                                 <div id="qrCodeDisplay" style="display: none;">
                                 <p>
-                                <input type="button" name="CreateBill" value="STEP 2: Call Create Bill API and Generate QR Payload" id="btnCreateBill" 
+                                <input type="button" name="CreateBill" value="STEP 2: Call Create Bill API and Generate QR Payload" id="btnCreateBill"
                                        onClick="createBill(); ShowContent('billStatusDisplay');" style="background-color: #FF9922;" />
                                 </p>
                                 </div>
@@ -544,7 +557,7 @@
                             
                                 <div id="billStatusDisplay" style="display: none;">
                                 <p>
-                                <input type="button" name="RetrieveBill" value="STEP 3: Call Retrieve Bill API for bill status (at interval)" id="btnRetrieveBill" 
+                                <input type="button" name="RetrieveBill" value="STEP 3: Call Retrieve Bill API for bill status (at interval)" id="btnRetrieveBill"
                                        onClick="retrieveBill(); ShowContent('billStatus');" style="background-color: #FF9922;" />
                                 </p>
                                 </div>
