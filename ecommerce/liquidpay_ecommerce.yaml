@@ -1,0 +1,655 @@
+openapi: 3.0.0
+info:
+  version: '1.0'
+  title: Liquid Pay eCommerce API
+  description:
+    <p>Liquid Pay is a secure public cloud-based system that supports online transactions and authorization in real-time. The application allows the use of mobile application to process transactions as a cost-effective payment solution.</p>
+    <p>The Liquid Pay Pay@eCommerce is cost-effective and productive feature that allow consumer to make payment at merchant internet ecommerce website.</p>
+    <p>Upon checkout, consumer scan a QR code display on their PC browser to complete the payment.</p>
+    <p>Upon a successful payment authorization by Liquid Pay, the merchant eCommerce system shall be updated of the payment status.</p>
+    <p>Liquid Pay APIs is architected around REST using standard HTTP to communicate and HTTP response codes to indicate status and errors. For information on REST, please refer to http://www.w3.org/Protocols/rfc2616/rfc2616.htm.</p>
+    <p>All responses come in standard JSON.</p>
+    <p><b>Payment Flow Description</b></p>
+    <p><ol>
+    <li value="1">Consumer checkout of eCommerce website via PC browser and select “xnap” payment</li>
+    <li>Merchant eCommerce host requested for a list of supported QR payload type from Liquid using "Retrieve Supported Dynamic QR Payload Types API"</li>
+    <li>Merchant website list down all supported payload type for consumer to select</li>
+    <li>Merchant eCommerce host requested “selected” QR scheme QR code from Liquid using “Create Bill API”.</li>
+    <li>Merchant website render and display selected QR code on the consumer PC display screen based on the QR payload provided</li>
+    <li>Consumer scan the QR code using mobile App and confirm payment</li>
+    <li>Issuer host authorize payment and send payment notification to Liquid. Liquid update the payment status on its system</li>
+    <li>Merchant eCommerce host poll Liquid for payment status using “Retrieve Bill API”. Liquid returned the payment status to merchant host</li>
+    <li>Merchant host update payment status to the consumer web browser. Payment completed.</li>
+    </ol></p>
+    <p><b>Signature Mechanism</b></p>
+    <p>Request signature is the mechanism to ensure the integrity and authenticity of the requests. It is mandatory for each request to Liquid Platform except GET request.</p>
+    <p>The signature is produced by SHA512 hash of the request body with a nonce and a secret (the client secret string to be provided during enrollment).</p>
+    <p>The signing includes the following steps:</p>
+    <p><ol>
+    <li value="1">Sort parameters names in ascending alphabetical order (excepts nonce and secret)</li>
+    <li>Remove empty parameters</li>
+    <li>URL encode all parameter values</li>
+    <li>Convert all field names and values to uppercase</li>
+    <li>Convert Boolean parameters to 1 (true) and 0 (false)</li>
+    <li>Concatenate each parameter with &</li>
+    <li>Append NONCE</li>
+    <li>Append SECRET (secret value is case sensitive)</li>
+    <li>Hash previous string with SHA512</li>
+    <li>The hash value in uppercase will be assigned to the sign property of the request</li>
+    <li>Apart from secret value, the rest of the string to be hashed should all be uppercase.</li>
+    </p></ol>
+
+    <p>Example</p>
+    <p>Original Request</p>
+    <p><pre>
+      {
+        "payee":"payee_i&ent|fi$r",
+        "service_type":"SP",
+        "merchant_ref_no":"12345679",
+        "currency":"",
+        "amount":25.10 
+      }
+    </pre></p>
+    <p>nonce = 5897884565425</p>
+    <p>sign = sha512(AMOUNT=25.10&MERCHANT_REF_NO=12345679&PAYEE=PAYEE_I%26ENT%7CFI%24R&NONCE=5897884565425&SECRET=secret_value)</p>
+    <p>Valid Request with Signature</p>
+    <p><pre>
+      {
+        "payee":"payee_i&ent|fi$r",
+        "service_type":"SP",
+        "merchant_ref_no":"12345679",
+        "currency":"",
+        "amount":25.10,
+        "nonce":"5897884565425",
+        "sign":"sign_value"
+      }
+    </pre></p>
+
+servers:
+  - url: 'https://localhost:2000'
+    description: staging environment
+  - url: 'https://localhost:3000'
+    description: production environment
+paths:
+
+  /v2/bill/qr/payloadtype:
+    get:
+      summary: 'Retrieve a list of supported dynamic QR payload types'
+      tags:
+        - Retrieve Supported Dynamic QR Payload Types
+      parameters:
+        - in: header
+          name: Liquid-Api-Key
+          description: The API key assigned during enrollment
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: payee
+          description: An unique identifier of payment acceptance point
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: service_code
+          #description: Value set to “31” for eCommerce
+          required: true
+          schema:
+            type: string
+            enum: ["31"]
+      responses:
+        '200':
+          description: list of dynamic QR payload types
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/list_of_payload_types'
+
+  /v2/bill/consumer/scan:
+    post:
+      summary: 'Create a bill which will in turn generate a dynamic QR for merchant to present to accept payment'
+      tags:
+        - Create Bill
+      parameters:
+        - in: header
+          name: Liquid-Api-Key
+          description: The API key assigned during enrollment
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: Idempotency-Key
+          description: Used for idempotent request
+          schema:
+            type: string
+      x-code-samples:
+        - lang: 'Curl'
+          source: |
+            curl --location --request POST 'https://localhost:2000/v2/bill/consumer/scan' \
+            --header 'Liquid-Api-Key: <string>' \
+            --header 'Idempotency-Key: <string>' \
+            --data-raw '{
+            "payee": "<string>",
+            "bill_ref_no": "<string>",
+            "service_code": "<string>",
+            "country_code": "<string>",
+            "amount": "<number>",
+            "payload_code": "<string>",
+            "nonce": "<string>",
+            "sign": "<string>",
+            "items": 
+              [
+                {
+                  "item_number": "<string>",
+                  "item_name": "<string>",
+                  "item_quantity": "<number>",
+                  "item_unit_price": "<number>",
+                  "item_uom": "<string>"
+                },
+                {
+                  "item_number": "<string>",
+                  "item_name": "<string>",
+                  "item_quantity": "<number>",
+                  "item_unit_price": "<number>",
+                  "item_uom": "<string>"
+                }
+              ]
+            }'
+        - lang: 'C#'
+          source: |
+            var client = new RestClient("https://localhost:2000/v2/bill/consumer/scan");
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Liquid-Api-Key", "<string>");
+            request.AddHeader("Idempotency-Key", "<string>");
+            request.AddParameter("text/plain", "{\n    \"payee\": \"<string>\",\n    \"bill_ref_no\": \"<string>\",\n    \"service_code\": \"<string>\",\n    \"country_code\": \"<string>\",\n    \"amount\": \"<number>\",\n    \"payload_code\": \"<string>\",\n    \"nonce\": \"<string>\",\n    \"sign\": \"<string>\",\n    \"items\": [\n        {\n            \"item_number\": \"<string>\",\n            \"item_name\": \"<string>\",\n            \"item_quantity\": \"<number>\",\n            \"item_unit_price\": \"<number>\",\n            \"item_uom\": \"<string>\"\n        },\n        {\n            \"item_number\": \"<string>\",\n            \"item_name\": \"<string>\",\n            \"item_quantity\": \"<number>\",\n            \"item_unit_price\": \"<number>\",\n            \"item_uom\": \"<string>\"\n        }\n    ]\n}",  ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+            Console.WriteLine(response.Content);
+        - lang: PHP
+          source: |
+            <?php
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://localhost:2000/v2/bill/consumer/scan",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => true,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS =>"{\n    \"payee\": \"<string>\",\n    \"bill_ref_no\": \"<string>\",\n    \"service_code\": \"<string>\",\n    \"country_code\": \"<string>\",\n    \"amount\": \"<number>\",\n    \"payload_code\": \"<string>\",\n    \"nonce\": \"<string>\",\n    \"sign\": \"<string>\",\n    \"items\": [\n        {\n            \"item_number\": \"<string>\",\n            \"item_name\": \"<string>\",\n            \"item_quantity\": \"<number>\",\n            \"item_unit_price\": \"<number>\",\n            \"item_uom\": \"<string>\"\n        },\n        {\n            \"item_number\": \"<string>\",\n            \"item_name\": \"<string>\",\n            \"item_quantity\": \"<number>\",\n            \"item_unit_price\": \"<number>\",\n            \"item_uom\": \"<string>\"\n        }\n    ]\n}",
+              CURLOPT_HTTPHEADER => array(
+                "Liquid-Api-Key: <string>",
+                "Idempotency-Key: <string>"
+              ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            echo $response;
+
+      requestBody:
+        description: Billing information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/billing_details'
+      responses:
+        '200':
+          description: Billing information and QR Payload based on requested Payload Code
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/qr_payload_info'
+
+  /v1/bill/{bill_ref_no}:
+    get:
+      summary: 'Retrieve the latest bill status from Liquid Pay'
+      tags:
+        - Retrieve Biil Information
+      parameters:
+        - in: header
+          name: Liquid-Api-Key
+          description: The API key assigned during enrollment
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: bill_ref_no
+          description: An unique identifier of bill generated by merchant
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of dynamic QR payload types
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing_status'
+
+  /v1/bill/{id}/cancel:
+    post:
+      summary: 'Cancel a bill payment request in progress on Liquid Platform'
+      tags:
+        - Cancel Bill
+      parameters:
+        - in: header
+          name: Liquid-Api-Key
+          description: The API key assigned during enrollment
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: Idempotency-Key
+          description: Used for idempotent request
+          schema:
+            type: string
+        - in: path
+          name: id
+          description: An unique identifier of bill generated by Liquid system. (NOT merchant bill_ref_no)
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Cancellation Details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/cancel_details'
+      responses:
+        '200':
+          description: Action Status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/action_status'
+
+  /v2/payments/{id}/void:
+    post:
+      summary: 'Void a completed and unsettled transaction'
+      tags:
+        - Void Payment
+      parameters:
+        - in: header
+          name: Liquid-Api-Key
+          description: The API key assigned during enrollment
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: Idempotency-Key
+          description: Used for idempotent request
+          schema:
+            type: string
+        - in: path
+          name: id
+          description: An unique identifier of bill generated by Liquid system. (NOT merchant bill_ref_no)
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Void Details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/void_details'
+      responses:
+        '200':
+          description: Action Status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/action_status'
+
+  /v2/payments/{id}/refund:
+    post:
+      summary: 'Refund a settled transaction'
+      tags:
+        - Refund Payment
+      parameters:
+        - in: header
+          name: Liquid-Api-Key
+          description: The API key assigned during enrollment
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: Idempotency-Key
+          description: Used for idempotent request
+          schema:
+            type: string
+        - in: path
+          name: id
+          description: An unique identifier of bill generated by Liquid system. (NOT merchant bill_ref_no)
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Refund Details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/refund_details'
+      responses:
+        '200':
+          description: Action Status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/action_status'
+
+components:
+  schemas:
+    list_of_payload_types:
+      type: object
+      required:
+        - type
+        - data
+      properties:
+        type:
+          type: string
+          description: Value fixed to 'list'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/payload_types'
+          description: (Array of payload_type object)        
+    payload_types:
+      type: object
+      properties:
+        payload_code:
+          type: string
+          description: Unique identifier for each of the supported payload type
+        name:
+          type: string
+          description: A short name for display purpose
+        mode:
+          type: string
+          description: The mode is used to identify the scheme consumer is using, consumer scan mode of QR payment. Value “C” – Consumer scan
+        country_code:
+          type: string
+          description: Wallet issuer country. This would allow the merchant to categorize and arrange the wallet name and icon base on country code.
+        image_url:
+          type: string
+          description: URL to retrieve the payload logo
+        embedded_image_url:
+          type: string
+          description: If URL is present, the image is required to be embedded into the middle of the QR code.
+    billing_details:
+      type: object
+      required:
+        - payee
+        - bill_ref_no
+        - service_code
+        - currency_code
+        - amount
+        - payload_code
+        - nonce
+        - sign
+      properties:
+        payee:
+          type: string
+          description: An unique identifier of payment acceptanace point.
+        bill_ref_no:
+          type: string
+          description: An unique bill reference no. generated by the merchant system
+        service_code:
+          type: string
+          description: Value set to “31” for ecommerce merchant
+        currency_code:
+          type: string
+          description: Currency code of the payable amount in ISO 4217
+        amount:
+          type: number
+          description: Customer Payable Amount
+        payload_code:
+          type: string
+          description: Selected payload_code from the list of supported QR payload type
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/billing_items'
+          description: (Array of billing items object)
+        nonce:
+          type: string
+          description: Please refer to Signature Mechanism
+        sign:
+          type: string
+          description: Please refer to Signature Mechanism
+    billing_items:
+      type: object
+      required:
+        - item_number
+        - item_name
+        - item_quantity
+        - item_unit_price
+      properties:
+        item_number:
+          type: string
+          description: The unique identifier of item that can be used to track down to the item merchant carry
+        item_name:
+          type: string
+          description: Description of the item
+        item_quantity:
+          type: number
+          description: Quantity of the purchased item
+        item_unit_price:
+          type: number
+          description: Unit price of the item
+        item_uom:
+          type: string
+          description: Unit of measure of item
+    qr_payload_info:
+      type: object
+      required:
+        - type
+        - id    
+        - bill_ref_no
+        - service_code
+        - bill_status
+        - original_currency_code
+        - original_amount
+        - final_currency_code
+        - final_amount
+        - qr_payload
+        - created_at
+        - updated_at      
+      properties:
+        type:
+          type: string
+          description: Value fixed to "bill"
+        id:            
+          type: string
+          description: An unique identifier of bill generated by Liquid system
+        bill_ref_no:
+          type: string
+          description: An unique Identifier of bill generated by merchant
+        service_code:
+          type: string
+          description: Echo from request message. Value = “31” for eCommerce merchant
+        bill_status:
+          type: string
+          description: Please refer to Bill Status reference table
+        original_currency_code:
+          type: string
+          description: Curreny code of the original amount
+        original_amount:
+          type: number
+          description: Original amount of the bill
+        final_currency_code:
+          type: string
+          description: Currency code of the final amount
+        final_amount:
+          type: number
+          description: Final amount of the bill in final currency code and after applicable discount is applied
+        qr_payload:
+          type: string
+          description: The QR payload to be presented for consumer scan
+        created_at:
+          type: string
+          description: Created timestamp of bill in RFC3339 format
+        updated_at:
+          type: string
+          description: The last updated timestamp of bill in RFC3339 format
+    billing_status:
+      type: object
+      required:
+        - type
+        - id    
+        - bill_ref_no
+        - service_code
+        - bill_status
+        - original_currency_code
+        - original_amount
+        - final_currency_code
+        - final_amount
+        - created_at
+        - updated_at      
+      properties:
+        type:
+          type: string
+          description: Value fixed to "bill"
+        id:            
+          type: string
+          description: An unique payment id generated by Liquid system. This ID would be used for cancel, void and refund.
+        bill_ref_no:
+          type: string
+          description: An unique Identifier of bill generated by merchant
+        service_code:
+          type: string
+          description: Echo from request message. Value = “31” for eCommerce merchant
+        bill_status:
+          type: string
+          description: Please refer to Bill Status reference table
+        payload_code:
+          type: string
+          description: The Name of wallet/scheme that perform the payment which would be present for create_bill
+        print_ref:
+          type: array
+          description: If this field is present, merchant system store the information for reference.
+          items:
+            type: string
+        original_currency_code:
+          type: string
+          description: Curreny code of the original amount
+        original_amount:
+          type: number
+          description: Original amount of the bill
+        final_currency_code:
+          type: string
+          description: Currency code of the final amount
+        final_amount:
+          type: number
+          description: Final amount of the bill in final currency code and after applicable discount is applied
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/discounts'
+          description: RFU
+        created_at:
+          type: string
+          description: Created timestamp of bill in RFC3339 format
+        updated_at:
+          type: string
+          description: The last updated timestamp of bill in RFC3339 format
+    discounts:
+      type: object
+      required:
+        - campaign_code
+        - discount_code
+        - voucher_discount_value
+      properties:
+        campaign_code:
+          type: string
+          description: Campaign code is issued by LiquidNet to partners during a joint promotion
+        discount_code:
+          type: string
+          description: Unique identifiier for each evoucher
+        voucher_discount_value:
+          type: string
+          description: Discount amount
+    cancel_details:
+      type: object
+      required:
+        - reason
+        - nonce
+        - sign
+      properties:
+        reason:
+          type: string
+          description: Reason to cancel the bill
+        nonce:
+          type: string
+          description: Please refer to Signature Mechanism
+        sign:
+          type: string
+          description: Please refer to Signature Mechanism
+    void_details:
+      type: object
+      required:
+        - reason
+        - currency_code
+        - amount
+        - nonce
+        - sign
+      properties:
+        reason:
+          type: string
+          description: Reason to cancel the bill
+        currency_code:
+          type: string
+          description: Currency code of the original amount
+        amount:
+          type: number
+          description: Amount of the bill
+        nonce:
+          type: string
+          description: Please refer to Signature Mechanism
+        sign:
+          type: string
+          description: Please refer to Signature Mechanism
+    refund_details:
+      type: object
+      required:
+        - reason
+        - currency_code
+        - amount
+        - nonce
+        - sign
+      properties:
+        reason:
+          type: string
+          description: Reason to cancel the bill
+        currency_code:
+          type: string
+          description: Currency code of the original amount
+        amount:
+          type: number
+          description: Amount of the bill to be refund. Amount can be partial or full amount and cannot be more than the original amount.
+        nonce:
+          type: string
+          description: Please refer to Signature Mechanism
+        sign:
+          type: string
+          description: Please refer to Signature Mechanism
+    action_status:
+      type: object
+      required:
+        - type
+        - id
+        - succeed
+      properties:
+        type:
+          type: string
+          description: Value fixed to 'action'
+        id:
+          type: string
+          description: An unique identifier of bill generated by Liquid system
+        succeed:
+          type: boolean
+          description: Status of action result
