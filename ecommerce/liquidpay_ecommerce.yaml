@@ -210,7 +210,7 @@ paths:
     get:
       summary: 'Retrieve the latest bill status from Liquid Pay'
       tags:
-        - Retrieve Biil Information
+        - Retrieve Bill Information
       parameters:
         - in: header
           name: Liquid-Api-Key
