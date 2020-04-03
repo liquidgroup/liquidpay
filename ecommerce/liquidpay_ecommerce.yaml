@@ -149,6 +149,22 @@ paths:
             } else {
               echo $response;
             }
+        - lang: 'Python'
+          source: |
+            import http.client
+
+            conn = http.client.HTTPSConnection("sandbox.api.liquidpay.com")
+
+            headers = {
+              'liquid-api-key': "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6"
+            }
+
+            conn.request("GET", "/openapi/v1/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31", headers=headers)
+
+            res = conn.getresponse()
+            data = res.read()
+
+            print(data.decode("utf-8"))
       responses:
         '200':
           description: list of dynamic QR payload types
@@ -256,7 +272,25 @@ paths:
               } else {
                 echo $response;
               }
+        - lang: 'Python'
+          source: |
+            import http.client
 
+            conn = http.client.HTTPSConnection("sandbox.api.liquidpay.com")
+
+            payload = ""
+
+            headers = {
+              'liquid-api-key': "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6",
+              'idempotency-key': "GEN-ZHmFHmSmHT688QCBuvHf8",
+            }
+
+            conn.request("POST", "/openapi/v1/bill/consumer/scan", payload, headers)
+
+            res = conn.getresponse()
+            data = res.read()
+
+            print(data.decode("utf-8"))
       requestBody:
         description: Billing information
         content:
@@ -341,6 +375,22 @@ paths:
             } else {
               echo $response;
             }
+        - lang: 'Python'
+          source: |
+            import http.client
+
+            conn = http.client.HTTPSConnection("sandbox.api.liquidpay.com")
+
+            headers = {
+              'liquid-api-key': "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6"
+            }
+
+            conn.request("GET", "/openapi/v1/bill/LQ9lV7I9OtqKcvG5YADA", headers=headers)
+
+            res = conn.getresponse()
+            data = res.read()
+
+            print(data.decode("utf-8"))
       responses:
         '200':
           description: Latest billing information and status
