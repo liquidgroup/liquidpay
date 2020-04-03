@@ -101,11 +101,11 @@ paths:
         - lang: 'Curl'
           source: |
             curl -X GET \
-            'https://sandbox.api.liquidpay.com/openapi/v1/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31' \
+            'https://sandbox.api.liquidpay.com/openapi/v2/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31' \
             -H 'liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6'
         - lang: 'C#'
           source: |
-            var client = new RestClient("https://sandbox.api.liquidpay.com/openapi/v1/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31");
+            var client = new RestClient("https://sandbox.api.liquidpay.com/openapi/v2/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31");
             var request = new RestRequest(Method.GET);
             request.AddHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6");
             IRestResponse response = client.Execute(request);
@@ -114,7 +114,7 @@ paths:
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://sandbox.api.liquidpay.com/openapi/v1/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31")
+              .url("https://sandbox.api.liquidpay.com/openapi/v2/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31")
               .get()
               .addHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6")
               .build();
@@ -127,7 +127,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://sandbox.api.liquidpay.com/openapi/v1/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31",
+              CURLOPT_URL => "https://sandbox.api.liquidpay.com/openapi/v2/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -159,7 +159,7 @@ paths:
               'liquid-api-key': "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6"
             }
 
-            conn.request("GET", "/openapi/v1/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31", headers=headers)
+            conn.request("GET", "/openapi/v2/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31", headers=headers)
 
             res = conn.getresponse()
             data = res.read()
@@ -194,7 +194,7 @@ paths:
         - lang: 'Curl'
           source: |
             curl -X POST \
-              https://sandbox.api.liquidpay.com/openapi/v1/bill/consumer/scan \
+              https://sandbox.api.liquidpay.com/openapi/v2/bill/consumer/scan \
               -H 'content-type: application/json' \
               -H 'idempotency-key: GEN-EMK73dFvD2BuHnXXNTcE8' \
               -H 'liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6' \
@@ -218,7 +218,7 @@ paths:
               }'
         - lang: 'C#'
           source: |
-            var client = new RestClient("https://sandbox.api.liquidpay.com/openapi/v1/bill/consumer/scan");
+            var client = new RestClient("https://sandbox.api.liquidpay.com/openapi/v2/bill/consumer/scan");
             var request = new RestRequest(Method.POST);
             request.AddHeader("idempotency-key", "GEN-EMK73dFvD2BuHnXXNTcE8");
             request.AddHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6");
@@ -232,7 +232,7 @@ paths:
             MediaType mediaType = MediaType.parse("application/json");
             RequestBody body = RequestBody.create(mediaType, "{\n  \"amount\": 1.1,\n  \"bill_ref_no\": \"3BN2mOhaqXco14H4MTfO\",\n  \"currency_code\": \"SGD\",\n  \"service_code\": \"31\",\n  \"items\": [\n    {\n      \"item_name\": \"itemName_1\",\n      \"item_number\": \"item+1\",\n      \"item_quantity\": 1,\n      \"item_unit_price\": 1.1\n    }\n  ],\n  \"payee\": \"merchant_eyJtZXJjaGFudF9pZCI6Im5lY18xIiwib3V0bGV0X2lkIjoibmVjX29fMSIsImxvY19ubyI6IjEifQ==\",\n  \"payload_code\": \"GRABQR\",\n  \"nonce\": \"1833079681\",\n  \"sign\": \"\"\n}");
             Request request = new Request.Builder()
-              .url("https://sandbox.api.liquidpay.com/openapi/v1/bill/consumer/scan")
+              .url("https://sandbox.api.liquidpay.com/openapi/v2/bill/consumer/scan")
               .post(body)
               .addHeader("content-type", "application/json")
               .addHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6")
@@ -247,7 +247,7 @@ paths:
               $curl = curl_init();
 
               curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://sandbox.api.liquidpay.com/openapi/v1/bill/consumer/scan",
+                CURLOPT_URL => "https://sandbox.api.liquidpay.com/openapi/v2/bill/consumer/scan",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10,
@@ -285,7 +285,7 @@ paths:
               'idempotency-key': "GEN-ZHmFHmSmHT688QCBuvHf8",
             }
 
-            conn.request("POST", "/openapi/v1/bill/consumer/scan", payload, headers)
+            conn.request("POST", "/openapi/v2/bill/consumer/scan", payload, headers)
 
             res = conn.getresponse()
             data = res.read()
