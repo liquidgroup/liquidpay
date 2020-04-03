@@ -19,11 +19,12 @@
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
     <!--http://www.willmaster.com/blog/css/show-hide-div-layer.php-->
-    <script type="text/javascript" src="scripts/qrcode.js"></script>
+    <script type="text/javascript" src="scripts/easy.qrcode.js"></script>
 
     <script type="text/javascript" language="JavaScript"><!--
         
     var qrImage = [];
+    var qrLogo = [];
     var intervalHandler;
     var timeoutHandler;
         
@@ -125,9 +126,12 @@
         resetQrImage();
         qrImage = [];
         qrImage.push([""]);
+        qrLogo = [];
+        qrLogo.push([""]);
         objData.data.forEach(function(o) {
             document.getElementById("payloadTypes").options[optionsIndex]=new Option(o.name+" ["+o.country_code+"]", o.payload_code);
             qrImage.push([o.image_url]);
+            qrLogo.push([o.embedded_image_url]);
             console.log(o.name, o.country_code);
             optionsIndex+=1;
         });
@@ -137,7 +141,7 @@
         document.getElementById("imgQrImage").src = "";
     }
 
-        function changeQrImage() {
+    function changeQrImage() {
         document.getElementById("imgQrImage").src = qrImage[document.getElementById("payloadTypes").selectedIndex];
     }
         
@@ -155,6 +159,7 @@
         $('#qrCode').empty();
         new QRCode(document.getElementById("qrCode"), {
             text: objData["qr_payload"],
+            logo: qrLogo[document.getElementById("payloadTypes").selectedIndex],
             correctLevel : QRCode.CorrectLevel.M
         });
     }
