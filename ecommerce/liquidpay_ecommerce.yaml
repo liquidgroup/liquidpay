@@ -422,6 +422,91 @@ paths:
           required: true
           schema:
             type: string
+      x-code-samples:
+        - lang: 'Curl'
+          source: |
+            curl -X POST \
+              https://sandbox.api.liquidpay.com/openapi/v1/bill/2019112014425742500097564/cancel \
+              -H 'content-type: application/json' \
+              -H 'idempotency-key: GEN-ZHmFHmSmHT688QCBuvHf8' \
+              -H 'liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6' \
+              -d '{"reason": "Test cancelling","nonce": "1833079681","sign": ""}'
+        - lang: 'C#'
+          source: |
+            var client = new RestClient("https://sandbox.api.liquidpay.com/openapi/v1/bill/2019112014425742500097564/cancel");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("idempotency-key", "GEN-ZHmFHmSmHT688QCBuvHf8");
+            request.AddHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6");
+            request.AddHeader("content-type", "application/json");
+            request.AddParameter("application/json", "{\n\t\"reason\": \"Test cancelling\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}", ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+        - lang: 'Java'
+          source: |
+            OkHttpClient client = new OkHttpClient();
+
+            MediaType mediaType = MediaType.parse("application/json");
+            RequestBody body = RequestBody.create(mediaType, "{\n\t\"reason\": \"Test cancelling\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}");
+            Request request = new Request.Builder()
+              .url("https://sandbox.api.liquidpay.com/openapi/v1/bill/2019112014425742500097564/cancel")
+              .post(body)
+              .addHeader("content-type", "application/json")
+              .addHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6")
+              .addHeader("idempotency-key", "GEN-ZHmFHmSmHT688QCBuvHf8")
+              .build();
+
+            Response response = client.newCall(request).execute();
+        - lang: 'PHP'
+          source: |
+            <?php
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://sandbox.api.liquidpay.com/openapi/v1/bill/2019112014425742500097564/cancel",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => "{\n\t\"reason\": \"Test cancelling\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}",
+              CURLOPT_HTTPHEADER => array(
+                "content-type: application/json",
+                "idempotency-key: GEN-ZHmFHmSmHT688QCBuvHf8",
+                "liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6",
+              ),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              echo $response;
+            }
+        - lang: 'Python'
+          source: |
+            import http.client
+
+            conn = http.client.HTTPSConnection("sandbox.api.liquidpay.com")
+
+            payload = "{\n\t\"reason\": \"Test cancelling\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}"
+
+            headers = {
+              'content-type': "application/json",
+              'liquid-api-key': "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6",
+              'idempotency-key': "GEN-ZHmFHmSmHT688QCBuvHf8"
+            }
+
+            conn.request("POST", "/openapi/v1/bill/2019112014425742500097564/cancel", payload, headers)
+
+            res = conn.getresponse()
+            data = res.read()
+
+            print(data.decode("utf-8"))
       requestBody:
         description: Cancellation Details
         content:
@@ -459,6 +544,93 @@ paths:
           required: true
           schema:
             type: string
+      x-code-samples:
+        - lang: 'Curl'
+          source: |
+            curl -X POST \
+              https://sandbox.api.liquidpay.com/openapi/v2/payments/2020031010275924092873552/void \
+              -H 'content-type: application/json' \
+              -H 'idempotency-key: GEN-ZHmFHmSmHT688QCBuvHf8' \
+              -H 'liquid-api-key: DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa' \
+              -d '{"amount": "1.00","currency_code": "SGD","reason": "Test void for Butleric","nonce": "1833079681","sign": ""}'
+        - lang: 'C#'
+          source: |
+            var client = new RestClient("https://sandbox.api.liquidpay.com/openapi/v2/payments/2020031010275924092873552/void");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("idempotency-key", "GEN-ZHmFHmSmHT688QCBuvHf8");
+            request.AddHeader("liquid-api-key", "DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa");
+            request.AddHeader("content-type", "application/json");
+            request.AddParameter("application/json", "{\n\t\"amount\": \"1.00\",\n\t\"currency_code\": \"SGD\",\n\t\"reason\": \"Test void for Butleric\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}", ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+        - lang: 'Java'
+          source: |
+            OkHttpClient client = new OkHttpClient();
+
+            MediaType mediaType = MediaType.parse("application/json");
+            RequestBody body = RequestBody.create(mediaType, "{\n\t\"amount\": \"1.00\",\n\t\"currency_code\": \"SGD\",\n\t\"reason\": \"Test void for Butleric\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}");
+            Request request = new Request.Builder()
+              .url("https://sandbox.api.liquidpay.com/openapi/v2/payments/2020031010275924092873552/void")
+              .post(body)
+              .addHeader("content-type", "application/json")
+              .addHeader("liquid-api-key", "DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa")
+              .addHeader("idempotency-key", "GEN-ZHmFHmSmHT688QCBuvHf8")
+              .addHeader("cache-control", "no-cache")
+              .addHeader("postman-token", "6a194364-e1a3-58be-1d9d-72a8228aeba2")
+              .build();
+
+            Response response = client.newCall(request).execute();
+        - lang: 'PHP'
+          source: |
+            <?php
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://sandbox.api.liquidpay.com/openapi/v2/payments/2020031010275924092873552/void",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => "{\n\t\"amount\": \"1.00\",\n\t\"currency_code\": \"SGD\",\n\t\"reason\": \"Test void for Butleric\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}",
+              CURLOPT_HTTPHEADER => array(
+                "content-type: application/json",
+                "idempotency-key: GEN-ZHmFHmSmHT688QCBuvHf8",
+                "liquid-api-key: DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa"
+              ),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              echo $response;
+            }
+        - lang: 'Python'
+          source: |
+            import http.client
+
+            conn = http.client.HTTPSConnection("sandbox.api.liquidpay.com")
+
+            payload = "{\n\t\"amount\": \"1.00\",\n\t\"currency_code\": \"SGD\",\n\t\"reason\": \"Test void for Butleric\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}"
+
+            headers = {
+              'content-type': "application/json",
+              'liquid-api-key': "DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa",
+              'idempotency-key': "GEN-ZHmFHmSmHT688QCBuvHf8",
+            }
+
+            conn.request("POST", "/openapi/v2/payments/2020031010275924092873552/void", payload, headers)
+
+            res = conn.getresponse()
+            data = res.read()
+
+            print(data.decode("utf-8"))
       requestBody:
         description: Void Details
         content:
@@ -496,6 +668,93 @@ paths:
           required: true
           schema:
             type: string
+      x-code-samples:
+        - lang: 'Curl'
+          source: |
+            curl -X POST \
+              https://sandbox.api.liquidpay.com/openapi/v2/payments/2020031010275924092873552/refund \
+              -H 'content-type: application/json' \
+              -H 'idempotency-key: GEN-ZHmFHmSmHT688QCBuvHf8' \
+              -H 'liquid-api-key: DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa' \
+              -d '{"amount": "1.00","currency_code": "SGD","reason": "Test void for Butleric","nonce": "1833079681","sign": ""}'
+        - lang: 'C#'
+          source: |
+            var client = new RestClient("https://sandbox.api.liquidpay.com/openapi/v2/payments/2020031010275924092873552/refund");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("idempotency-key", "GEN-ZHmFHmSmHT688QCBuvHf8");
+            request.AddHeader("liquid-api-key", "DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa");
+            request.AddHeader("content-type", "application/json");
+            request.AddParameter("application/json", "{\n\t\"amount\": \"1.00\",\n\t\"currency_code\": \"SGD\",\n\t\"reason\": \"Test void for Butleric\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}", ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+        - lang: 'Java'
+          source: |
+            OkHttpClient client = new OkHttpClient();
+
+            MediaType mediaType = MediaType.parse("application/json");
+            RequestBody body = RequestBody.create(mediaType, "{\n\t\"amount\": \"1.00\",\n\t\"currency_code\": \"SGD\",\n\t\"reason\": \"Test void for Butleric\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}");
+            Request request = new Request.Builder()
+              .url("https://sandbox.api.liquidpay.com/openapi/v2/payments/2020031010275924092873552/refund")
+              .post(body)
+              .addHeader("content-type", "application/json")
+              .addHeader("liquid-api-key", "DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa")
+              .addHeader("idempotency-key", "GEN-ZHmFHmSmHT688QCBuvHf8")
+              .addHeader("cache-control", "no-cache")
+              .addHeader("postman-token", "6a194364-e1a3-58be-1d9d-72a8228aeba2")
+              .build();
+
+            Response response = client.newCall(request).execute();
+        - lang: 'PHP'
+          source: |
+            <?php
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://sandbox.api.liquidpay.com/openapi/v2/payments/2020031010275924092873552/refund",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => "{\n\t\"amount\": \"1.00\",\n\t\"currency_code\": \"SGD\",\n\t\"reason\": \"Test void for Butleric\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}",
+              CURLOPT_HTTPHEADER => array(
+                "content-type: application/json",
+                "idempotency-key: GEN-ZHmFHmSmHT688QCBuvHf8",
+                "liquid-api-key: DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa"
+              ),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              echo $response;
+            }
+        - lang: 'Python'
+          source: |
+            import http.client
+
+            conn = http.client.HTTPSConnection("sandbox.api.liquidpay.com")
+
+            payload = "{\n\t\"amount\": \"1.00\",\n\t\"currency_code\": \"SGD\",\n\t\"reason\": \"Test void for Butleric\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}"
+
+            headers = {
+              'content-type': "application/json",
+              'liquid-api-key': "DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa",
+              'idempotency-key': "GEN-ZHmFHmSmHT688QCBuvHf8",
+            }
+
+            conn.request("POST", "/openapi/v2/payments/2020031010275924092873552/refund", payload, headers)
+
+            res = conn.getresponse()
+            data = res.read()
+
+            print(data.decode("utf-8"))
       requestBody:
         description: Refund Details
         content:
