@@ -172,8 +172,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/list_of_payload_types'
-              x-examples:
-                {"test": "1"}
 
   /v2/bill/consumer/scan:
     post:
