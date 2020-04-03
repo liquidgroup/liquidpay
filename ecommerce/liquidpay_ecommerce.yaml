@@ -97,6 +97,85 @@ paths:
           schema:
             type: string
             enum: ["31"]
+      x-code-samples:
+        - lang: 'Curl'
+          source: |
+            curl -X GET \
+            'https://sandbox.api.liquidpay.com/openapi/v1/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31' \
+            -H 'liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6'
+        - lang: 'C#'
+          source: |
+            var client = new RestClient("https://sandbox.api.liquidpay.com/openapi/v1/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31");
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6");
+            IRestResponse response = client.Execute(request);
+        - lang: 'Java'
+          source: |
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+              .url("https://sandbox.api.liquidpay.com/openapi/v1/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31")
+              .get()
+              .addHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6")
+              .build();
+
+            Response response = client.newCall(request).execute();
+        - lang: 'Go'
+          source: |
+            package main
+
+            import (
+            	"fmt"
+            	"net/http"
+	            "io/ioutil"
+            )
+
+            func main() {
+
+            	url := "https://sandbox.api.liquidpay.com/openapi/v1/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31"
+
+            	req, _ := http.NewRequest("GET", url, nil)
+
+            	req.Header.Add("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6")
+
+            	res, _ := http.DefaultClient.Do(req)
+
+            	defer res.Body.Close()
+            	body, _ := ioutil.ReadAll(res.Body)
+
+            	fmt.Println(res)
+            	fmt.Println(string(body))
+
+            }
+        - lang: 'PHP'
+          source: |
+            <?php
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://sandbox.api.liquidpay.com/openapi/v1/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "GET",
+              CURLOPT_HTTPHEADER => array(
+                "liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6"
+              ),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              echo $response;
+            }
       responses:
         '200':
           description: list of dynamic QR payload types
@@ -157,40 +236,12 @@ paths:
             }'
         - lang: 'C#'
           source: |
-            var client = new RestClient("https://localhost:2000/v2/bill/consumer/scan");
-            client.Timeout = -1;
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("Liquid-Api-Key", "<string>");
-            request.AddHeader("Idempotency-Key", "<string>");
-            request.AddParameter("text/plain", "{\n    \"payee\": \"<string>\",\n    \"bill_ref_no\": \"<string>\",\n    \"service_code\": \"<string>\",\n    \"country_code\": \"<string>\",\n    \"amount\": \"<number>\",\n    \"payload_code\": \"<string>\",\n    \"nonce\": \"<string>\",\n    \"sign\": \"<string>\",\n    \"items\": [\n        {\n            \"item_number\": \"<string>\",\n            \"item_name\": \"<string>\",\n            \"item_quantity\": \"<number>\",\n            \"item_unit_price\": \"<number>\",\n            \"item_uom\": \"<string>\"\n        },\n        {\n            \"item_number\": \"<string>\",\n            \"item_name\": \"<string>\",\n            \"item_quantity\": \"<number>\",\n            \"item_unit_price\": \"<number>\",\n            \"item_uom\": \"<string>\"\n        }\n    ]\n}",  ParameterType.RequestBody);
-            IRestResponse response = client.Execute(request);
-            Console.WriteLine(response.Content);
-        - lang: PHP
+        - lang: 'Java'
           source: |
-            <?php
-
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://localhost:2000/v2/bill/consumer/scan",
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_ENCODING => "",
-              CURLOPT_MAXREDIRS => 10,
-              CURLOPT_TIMEOUT => 0,
-              CURLOPT_FOLLOWLOCATION => true,
-              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-              CURLOPT_CUSTOMREQUEST => "POST",
-              CURLOPT_POSTFIELDS =>"{\n    \"payee\": \"<string>\",\n    \"bill_ref_no\": \"<string>\",\n    \"service_code\": \"<string>\",\n    \"country_code\": \"<string>\",\n    \"amount\": \"<number>\",\n    \"payload_code\": \"<string>\",\n    \"nonce\": \"<string>\",\n    \"sign\": \"<string>\",\n    \"items\": [\n        {\n            \"item_number\": \"<string>\",\n            \"item_name\": \"<string>\",\n            \"item_quantity\": \"<number>\",\n            \"item_unit_price\": \"<number>\",\n            \"item_uom\": \"<string>\"\n        },\n        {\n            \"item_number\": \"<string>\",\n            \"item_name\": \"<string>\",\n            \"item_quantity\": \"<number>\",\n            \"item_unit_price\": \"<number>\",\n            \"item_uom\": \"<string>\"\n        }\n    ]\n}",
-              CURLOPT_HTTPHEADER => array(
-                "Liquid-Api-Key: <string>",
-                "Idempotency-Key: <string>"
-              ),
-            ));
-
-            $response = curl_exec($curl);
-
-            curl_close($curl);
-            echo $response;
+        - lang: 'Go'
+          source: |
+        - lang: 'PHP'
+          source: |
 
       requestBody:
         description: Billing information
