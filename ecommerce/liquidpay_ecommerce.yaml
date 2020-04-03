@@ -177,44 +177,84 @@ paths:
       x-code-samples:
         - lang: 'Curl'
           source: |
-            curl --location --request POST 'https://localhost:2000/v2/bill/consumer/scan' \
-            --header 'Liquid-Api-Key: <string>' \
-            --header 'Idempotency-Key: <string>' \
-            --data-raw '{
-            "payee": "<string>",
-            "bill_ref_no": "<string>",
-            "service_code": "<string>",
-            "country_code": "<string>",
-            "amount": "<number>",
-            "payload_code": "<string>",
-            "nonce": "<string>",
-            "sign": "<string>",
-            "items":
-              [
-                {
-                  "item_number": "<string>",
-                  "item_name": "<string>",
-                  "item_quantity": "<number>",
-                  "item_unit_price": "<number>",
-                  "item_uom": "<string>"
-                },
-                {
-                  "item_number": "<string>",
-                  "item_name": "<string>",
-                  "item_quantity": "<number>",
-                  "item_unit_price": "<number>",
-                  "item_uom": "<string>"
-                }
-              ]
-            }'
+            curl -X POST \
+              https://sandbox.api.liquidpay.com/openapi/v1/bill/consumer/scan \
+              -H 'content-type: application/json' \
+              -H 'idempotency-key: GEN-EMK73dFvD2BuHnXXNTcE8' \
+              -H 'liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6' \
+              -d '{
+                "amount": 1.1,
+                "bill_ref_no": "3BN2mOhaqXco14H4MTfO",
+                "currency_code": "SGD",
+                "items": [
+                  {
+                    "item_name": "itemName_1",
+                    "item_number": "item+1",
+                    "item_quantity": 1,
+                    "item_unit_price": 1.1
+                  }
+                ],
+                "payee": "merchant_eyJtZXJjaGFudF9pZCI6Im5lY18xIiwib3V0bGV0X2lkIjoibmVjX29fMSIsImxvY19ubyI6IjEifQ==",
+                "payload_code": "GRABQR",
+                "nonce": "1833079681",
+                "sign": ""
+              }'
         - lang: 'C#'
           source: |
+            var client = new RestClient("https://sandbox.api.liquidpay.com/openapi/v1/bill/consumer/scan");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("idempotency-key", "GEN-EMK73dFvD2BuHnXXNTcE8");
+            request.AddHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6");
+            request.AddHeader("content-type", "application/json");
+            request.AddParameter("application/json", "{\n  \"amount\": 1.1,\n  \"bill_ref_no\": \"3BN2mOhaqXco14H4MTfO\",\n  \"currency_code\": \"SGD\",\n  \"items\": [\n    {\n      \"item_name\": \"itemName_1\",\n      \"item_number\": \"item+1\",\n      \"item_quantity\": 1,\n      \"item_unit_price\": 1.1\n    }\n  ],\n  \"payee\": \"merchant_eyJtZXJjaGFudF9pZCI6Im5lY18xIiwib3V0bGV0X2lkIjoibmVjX29fMSIsImxvY19ubyI6IjEifQ==\",\n  \"payload_code\": \"GRABQR\",\n  \"nonce\": \"1833079681\",\n  \"sign\": \"\"\n}", ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
         - lang: 'Java'
           source: |
-        - lang: 'Go'
-          source: |
+            OkHttpClient client = new OkHttpClient();
+
+            MediaType mediaType = MediaType.parse("application/json");
+            RequestBody body = RequestBody.create(mediaType, "{\n  \"amount\": 1.1,\n  \"bill_ref_no\": \"3BN2mOhaqXco14H4MTfO\",\n  \"currency_code\": \"SGD\",\n  \"items\": [\n    {\n      \"item_name\": \"itemName_1\",\n      \"item_number\": \"item+1\",\n      \"item_quantity\": 1,\n      \"item_unit_price\": 1.1\n    }\n  ],\n  \"payee\": \"merchant_eyJtZXJjaGFudF9pZCI6Im5lY18xIiwib3V0bGV0X2lkIjoibmVjX29fMSIsImxvY19ubyI6IjEifQ==\",\n  \"payload_code\": \"GRABQR\",\n  \"nonce\": \"1833079681\",\n  \"sign\": \"\"\n}");
+            Request request = new Request.Builder()
+              .url("https://sandbox.api.liquidpay.com/openapi/v1/bill/consumer/scan")
+              .post(body)
+              .addHeader("content-type", "application/json")
+              .addHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6")
+              .addHeader("idempotency-key", "GEN-EMK73dFvD2BuHnXXNTcE8")
+              .build();
+
+            Response response = client.newCall(request).execute();
         - lang: 'PHP'
           source: |
+            <?php
+
+              $curl = curl_init();
+
+              curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://sandbox.api.liquidpay.com/openapi/v1/bill/consumer/scan",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => "{\n  \"amount\": 1.1,\n  \"bill_ref_no\": \"3BN2mOhaqXco14H4MTfO\",\n  \"currency_code\": \"SGD\",\n  \"items\": [\n    {\n      \"item_name\": \"itemName_1\",\n      \"item_number\": \"item+1\",\n      \"item_quantity\": 1,\n      \"item_unit_price\": 1.1\n    }\n  ],\n  \"payee\": \"merchant_eyJtZXJjaGFudF9pZCI6Im5lY18xIiwib3V0bGV0X2lkIjoibmVjX29fMSIsImxvY19ubyI6IjEifQ==\",\n  \"payload_code\": \"GRABQR\",\n  \"nonce\": \"1833079681\",\n  \"sign\": \"\"\n}",
+                CURLOPT_HTTPHEADER => array(
+                  "content-type: application/json",
+                  "idempotency-key: GEN-EMK73dFvD2BuHnXXNTcE8",
+                  "liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6"
+                ),
+              ));
+
+              $response = curl_exec($curl);
+              $err = curl_error($curl);
+
+              curl_close($curl);
+
+              if ($err) {
+                echo "cURL Error #:" . $err;
+              } else {
+                echo $response;
+              }
 
       requestBody:
         description: Billing information
