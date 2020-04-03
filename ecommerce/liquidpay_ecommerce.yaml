@@ -120,33 +120,6 @@ paths:
               .build();
 
             Response response = client.newCall(request).execute();
-        - lang: 'Go'
-          source: |
-            package main
-
-            import (
-            	"fmt"
-            	"net/http"
-	            "io/ioutil"
-            )
-
-            func main() {
-
-            	url := "https://sandbox.api.liquidpay.com/openapi/v1/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31"
-
-            	req, _ := http.NewRequest("GET", url, nil)
-
-            	req.Header.Add("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6")
-
-            	res, _ := http.DefaultClient.Do(req)
-
-            	defer res.Body.Close()
-            	body, _ := ioutil.ReadAll(res.Body)
-
-            	fmt.Println(res)
-            	fmt.Println(string(body))
-
-            }
         - lang: 'PHP'
           source: |
             <?php
