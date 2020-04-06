@@ -98,8 +98,8 @@
     }
 
     function payOrder() {
-        if (document.getElementById("radLiquid").checked && document.getElementById("payloadTypes").selectedIndex > 0) {
-            ShowContent("qrCodeDisplay");
+        if (document.getElementById("radLiquid").checked) {
+            ShowContent("qrRelatedStuff");
             document.getElementById("radCDCard").disabled = true;
             document.getElementById("radLiquid").disabled = true;
             document.getElementById("btnPayLiquid").disabled = true;
@@ -114,6 +114,26 @@
         // Please take note that this is for demo purpose only.
         // It is generally not recommended to use Javascript to call our API as it will expose your secret key
         // ---------------------------------------------------------------------------------------------------
+
+        /*
+        var sandboxUrl = new URL("https://sandbox.api.liquidpay.com/openapi/v1/bill/qr/payloadtypes");
+        var payee = "merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ==";
+        var serviceCode = "31";
+        
+        sandboxUrl.searchParams.set("payee",payee);
+        sandboxUrl.searchParams.set("service_code",serviceCode);
+        console.log(sandboxUrl);
+        
+        let responseObj = fetch(sandboxUrl, {
+            mode: 'cors',
+            headers: {
+                'Access-Control-Allow-Origin': 'https://example.com',
+                'Liquid-Api-Key': 'GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6'
+            }
+        });
+
+        console.log(responseObj);
+        */
 
         var jsonData = '{"type":"list","data":[{"payload_code":"GRABPAYQR","name":"GrabPay QR","mode":"C","country_code":"SG","image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/191120022605.png","embedded_image_url":""},{"payload_code":"SCBQR","name":"Thai QR payment","mode":"C","country_code":"TH","image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/191120023616.png","embedded_image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/CTR_191120023617.png"},{"payload_code":"SINGTELDASHQR","name":"Dash QR","mode":"C","country_code":"SG","image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/191120031340.png","embedded_image_url":""}]}'
 
@@ -132,7 +152,6 @@
             document.getElementById("payloadTypes").options[optionsIndex]=new Option(o.name+" ["+o.country_code+"]", o.payload_code);
             qrImage.push([o.image_url]);
             qrLogo.push([o.embedded_image_url]);
-            console.log(o.name, o.country_code);
             optionsIndex+=1;
         });
     }
@@ -143,6 +162,7 @@
 
     function changeQrImage() {
         document.getElementById("imgQrImage").src = qrImage[document.getElementById("payloadTypes").selectedIndex];
+        ShowContent("qrCodeDisplay");
     }
         
     function createBill() {
@@ -489,7 +509,7 @@
                             <ul class="address-review summary">
                                 <li><strong>Choose Payment Type</strong></li>
                                 <input type="radio" name="PaymentType" id="radCDCard" value="radCDCard"
-                                       onclick="ShowContent('creditcardform'); HideContent('payloadTypesList'); HideContent('qrRelatedStuff');" />
+                                       onclick="ShowContent('creditcardform');" />
                                 Credit / Debit Card
                                 <br>
                                 <li class="credit-card-fields">
@@ -529,11 +549,11 @@
                                     </div>
                                 </li>
                                 
-                                <label><p><input type="radio" name="PaymentType" id="radLiquid" value="radLiquid" onclick="HideContent('creditcardform'); ShowContent('qrRelatedStuff');" checked="checked" />
+                                <label><p><input type="radio" name="PaymentType" id="radLiquid" value="radLiquid" onclick="HideContent('creditcardform');" checked="checked" />
                                 <img style="display: inline; vertical-align: middle;" src="images/liquid-pay-icon.png" alt="Liquid is your mobile wallet that offers discounts on every e-commerce and m-commerce purchase." />
                                 </p></label>
                                 
-                                <div id='qrRelatedStuff' style="display: block;">
+                                <div id='qrRelatedStuff' style="display: none;">
 
                                 <div id="divGetPayloadTypes" style="display: block;">
                                 <p>
@@ -541,11 +561,11 @@
                                 </p>
                                 </div>
 
-                                <div id="payloadTypesList" style="display: none;">
+                                <div id="payloadTypesList" style="display: block;">
                                     <p>
                                     <label>QR Code Payment Options:</label>
                                     <select id="payloadTypes" onchange="return changeQrImage();">
-                                        <option value="">Please select QR Code options</option>
+                                        <option value="">Please select one of these QR Code options</option>
                                     </select>
                                     <img src="" id="imgQrImage">
                                     </p>
