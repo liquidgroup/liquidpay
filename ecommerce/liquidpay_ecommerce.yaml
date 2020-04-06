@@ -80,23 +80,25 @@ paths:
       parameters:
         - in: header
           name: Liquid-Api-Key
+          example: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6
           description: The API key assigned during enrollment
           schema:
             type: string
           required: true
         - in: query
           name: payee
+          example: merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D
           description: An unique identifier of payment acceptance point
           required: true
           schema:
             type: string
         - in: query
           name: service_code
-          #description: Value set to “31” for eCommerce
+          description: Value set to “31” for eCommerce
+          example: 31
           required: true
           schema:
             type: string
-            enum: ["31"]
       x-code-samples:
         - lang: 'Curl'
           source: |
@@ -779,9 +781,11 @@ components:
       properties:
         type:
           type: string
+          example: list
           description: Value fixed to 'list'
         data:
           type: array
+          example: [{"payload_code":"GRABPAYQR","name":"GrabPay QR","mode":"C","country_code":"SG","image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/191120022605.png","embedded_image_url":""},{"payload_code":"SCB","name":"Thai QR payment","mode":"C","country_code":"TH","image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/191120023616.png","embedded_image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/CTR_191120023617.png"},{"payload_code":"SINGTELDASHQR","name":"Dash QR","mode":"C","country_code":"SG","image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/191120031340.png","embedded_image_url":""}]
           items:
             $ref: '#/components/schemas/payload_types'
           description: (Array of payload_type object)
