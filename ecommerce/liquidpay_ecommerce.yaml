@@ -992,6 +992,7 @@ components:
           description: The Name of wallet/scheme that perform the payment which would be present for create_bill
         print_ref:
           type: array
+          example: []
           description: If this field is present, merchant system store the information for reference.
           items:
             type: string
@@ -1013,6 +1014,7 @@ components:
           description: Final amount of the bill in final currency code and after applicable discount is applied
         discounts:
           type: array
+          example: null
           items:
             $ref: '#/components/schemas/discounts'
           description: RFU
