@@ -64,6 +64,9 @@ info:
         "sign":"sign_value"
       }
     </pre></p>
+    <p><b>Demo</b></p>
+    <p>Demo page on how to implement this API to enable XNAP payment acceptance is available <a href="https://liquidgroup.github.io/liquidpay/ecommerce/demo/">here</a>
+    </p>
 
 servers:
   - url: 'https://sandbox.api.liquidpay.com/openapi'
