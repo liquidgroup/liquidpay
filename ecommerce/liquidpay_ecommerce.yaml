@@ -65,7 +65,7 @@ info:
       }
     </pre></p>
     <p><b>Demo</b></p>
-    <p>Demo page on how to implement this API to enable XNAP payment acceptance is available <a href="https://liquidgroup.github.io/liquidpay/ecommerce/demo/">here</a>
+    <p>Demo page on how to implement this API to enable XNAP payment acceptance is available on this <a href="https://liquidgroup.github.io/liquidpay/ecommerce/demo/">link</a>
     </p>
 
 servers:
@@ -560,14 +560,14 @@ paths:
               https://sandbox.api.liquidpay.com/openapi/v2/payments/2020031010275924092873552/void \
               -H 'content-type: application/json' \
               -H 'idempotency-key: GEN-ZHmFHmSmHT688QCBuvHf8' \
-              -H 'liquid-api-key: DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa' \
+              -H 'liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6' \
               -d '{"amount": "1.00","currency_code": "SGD","reason": "Test void for Butleric","nonce": "1833079681","sign": ""}'
         - lang: 'C#'
           source: |
             var client = new RestClient("https://sandbox.api.liquidpay.com/openapi/v2/payments/2020031010275924092873552/void");
             var request = new RestRequest(Method.POST);
             request.AddHeader("idempotency-key", "GEN-ZHmFHmSmHT688QCBuvHf8");
-            request.AddHeader("liquid-api-key", "DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa");
+            request.AddHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6");
             request.AddHeader("content-type", "application/json");
             request.AddParameter("application/json", "{\n\t\"amount\": \"1.00\",\n\t\"currency_code\": \"SGD\",\n\t\"reason\": \"Test void for Butleric\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}", ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
@@ -581,7 +581,7 @@ paths:
               .url("https://sandbox.api.liquidpay.com/openapi/v2/payments/2020031010275924092873552/void")
               .post(body)
               .addHeader("content-type", "application/json")
-              .addHeader("liquid-api-key", "DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa")
+              .addHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6")
               .addHeader("idempotency-key", "GEN-ZHmFHmSmHT688QCBuvHf8")
               .addHeader("cache-control", "no-cache")
               .addHeader("postman-token", "6a194364-e1a3-58be-1d9d-72a8228aeba2")
@@ -606,7 +606,7 @@ paths:
               CURLOPT_HTTPHEADER => array(
                 "content-type: application/json",
                 "idempotency-key: GEN-ZHmFHmSmHT688QCBuvHf8",
-                "liquid-api-key: DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa"
+                "liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6"
               ),
             ));
 
@@ -630,7 +630,7 @@ paths:
 
             headers = {
               'content-type': "application/json",
-              'liquid-api-key': "DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa",
+              'liquid-api-key': "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6",
               'idempotency-key': "GEN-ZHmFHmSmHT688QCBuvHf8",
             }
 
@@ -684,14 +684,14 @@ paths:
               https://sandbox.api.liquidpay.com/openapi/v2/payments/2020031010275924092873552/refund \
               -H 'content-type: application/json' \
               -H 'idempotency-key: GEN-ZHmFHmSmHT688QCBuvHf8' \
-              -H 'liquid-api-key: DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa' \
+              -H 'liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6' \
               -d '{"amount": "1.00","currency_code": "SGD","reason": "Test void for Butleric","nonce": "1833079681","sign": ""}'
         - lang: 'C#'
           source: |
             var client = new RestClient("https://sandbox.api.liquidpay.com/openapi/v2/payments/2020031010275924092873552/refund");
             var request = new RestRequest(Method.POST);
             request.AddHeader("idempotency-key", "GEN-ZHmFHmSmHT688QCBuvHf8");
-            request.AddHeader("liquid-api-key", "DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa");
+            request.AddHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6");
             request.AddHeader("content-type", "application/json");
             request.AddParameter("application/json", "{\n\t\"amount\": \"1.00\",\n\t\"currency_code\": \"SGD\",\n\t\"reason\": \"Test void for Butleric\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}", ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
@@ -705,7 +705,7 @@ paths:
               .url("https://sandbox.api.liquidpay.com/openapi/v2/payments/2020031010275924092873552/refund")
               .post(body)
               .addHeader("content-type", "application/json")
-              .addHeader("liquid-api-key", "DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa")
+              .addHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6")
               .addHeader("idempotency-key", "GEN-ZHmFHmSmHT688QCBuvHf8")
               .addHeader("cache-control", "no-cache")
               .addHeader("postman-token", "6a194364-e1a3-58be-1d9d-72a8228aeba2")
@@ -730,7 +730,7 @@ paths:
               CURLOPT_HTTPHEADER => array(
                 "content-type: application/json",
                 "idempotency-key: GEN-ZHmFHmSmHT688QCBuvHf8",
-                "liquid-api-key: DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa"
+                "liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6"
               ),
             ));
 
@@ -754,7 +754,7 @@ paths:
 
             headers = {
               'content-type': "application/json",
-              'liquid-api-key': "DMY2sS7pOMQFDKVTjSrcnR5QHMwfvgIa",
+              'liquid-api-key': "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6",
               'idempotency-key': "GEN-ZHmFHmSmHT688QCBuvHf8",
             }
 
@@ -832,7 +832,7 @@ components:
         payee:
           type: string
           example: merchant_eyJtZXJjaGFudF9pZCI6Im5lY18xIiwib3V0bGV0X2lkIjoibmVjX29fMSIsImxvY19ubyI6IjEifQ==
-          description: An unique identifier of payment acceptanace point.
+          description: An unique identifier of payment acceptance point.
         bill_ref_no:
           type: string
           example: rMT0FeVpmDpuVulDnUQa
