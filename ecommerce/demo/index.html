@@ -19,7 +19,7 @@
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
     <!--http://www.willmaster.com/blog/css/show-hide-div-layer.php-->
-    <script type="text/javascript" src="scripts/easy.qrcode.js"></script>
+    <script type="text/javascript" src="scripts/qrcode.js"></script>
 
     <script type="text/javascript" language="JavaScript"><!--
         
@@ -103,6 +103,7 @@
             document.getElementById("radCDCard").disabled = true;
             document.getElementById("radLiquid").disabled = true;
             document.getElementById("btnPayLiquid").disabled = true;
+            HideContent("btnPayLiquid")
         }
         return false;
     }
@@ -179,6 +180,8 @@
         $('#qrCode').empty();
         new QRCode(document.getElementById("qrCode"), {
             text: objData["qr_payload"],
+            title: 'SCAN ME',
+            titileTop: -30,
             logo: qrLogo[document.getElementById("payloadTypes").selectedIndex],
             correctLevel : QRCode.CorrectLevel.M
         });
