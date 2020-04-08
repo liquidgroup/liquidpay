@@ -208,7 +208,7 @@
         });
     }
     
-    function step3() {
+    function checkBillStatus() {
         var bill_ref_no = document.getElementById("hidBillRefNo").value;
         var content = '{"bill_ref_no":"'+bill_ref_no+'"}';
 
@@ -217,7 +217,7 @@
         document.body.appendChild(s);
     }
 
-    function checkBillStatus(json_data) {
+    function retrieveBill(json_data) {
         
         // Call Retrieve Bill API here to check latest bill status
         // ---------------------------------------------------------------------------------------------------
@@ -226,7 +226,7 @@
         // ---------------------------------------------------------------------------------------------------
         
         jsonData = json_data;
-        console.log('checkBillStatus: '+jsonData);
+        console.log('retrieveBill: '+jsonData);
         //var jsonData = '{"type": "bill","id": "2020011423292157700050521","payee": "merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0ZXN0IiwibG9jX25vIjoiMSJ9","bill_ref_no": "LQ9lV7I9OtqKcvG5YADA","bill_status": "P","original_currency_code": "SGD","original_amount": 1,"final_currency_code": "SGD","final_amount": 1,"items": null,"created_at": "2020-01-14T23:29:21+08:00","updated_at": "2020-01-14T23:29:24+08:00","print_ref": [],"payload_code": "MERCHANTSCANQR"}';
         
         var objData = JSON.parse(jsonData);
@@ -249,11 +249,11 @@
         }
     }
         
-    function retrieveBill(json_data) {
+    function step3() {
         document.getElementById("spnBillStatus").textContent = "Please wait...";
         
         // repeat with the interval of 5 seconds
-        intervalHandler = setInterval(() => checkBillStatus(json_data), 5000);
+        intervalHandler = setInterval(() => checkBillStatus(), 5000);
 
         // after 15 seconds stop
         timeoutHandler = setTimeout(() => { clearInterval(intervalHandler); alert('Timeout. Please Retry.'); }, 60000);
