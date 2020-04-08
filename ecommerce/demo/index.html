@@ -121,7 +121,7 @@
     
     function step1() {
         s = document.createElement("script");
-        s.src = "http://liquidpay.rf.gd/liquidapi.php?action=GETQRLIST";
+        s.src = "https://liquidpay.rf.gd/liquidapi.php?action=GETQRLIST";
         document.body.appendChild(s);
     }
     
@@ -176,7 +176,7 @@
         var content = '{"bill_ref_no":"'+bill_ref_no+'","currency_code":"'+currency_code+'","amount":'+amount+',"payload_code":"'+payload_code+'"}';
 
         s = document.createElement("script");
-        s.src = "http://liquidpay.rf.gd/liquidapi.php?action=CREATEBILL&body="+escape(content);
+        s.src = "https://liquidpay.rf.gd/liquidapi.php?action=CREATEBILL&body="+escape(content);
         document.body.appendChild(s);
     }
     
@@ -213,7 +213,7 @@
         var content = '{"bill_ref_no":"'+bill_ref_no+'"}';
 
         s = document.createElement("script");
-        s.src = "http://liquidpay.rf.gd/liquidapi.php?action=GETBILLSTATUS&params="+escape(content);
+        s.src = "https://liquidpay.rf.gd/liquidapi.php?action=GETBILLSTATUS&params="+escape(content);
         document.body.appendChild(s);
     }
 
