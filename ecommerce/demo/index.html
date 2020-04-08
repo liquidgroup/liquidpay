@@ -97,6 +97,16 @@
         return false;
     }
 
+    function makeid(length) {
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
+
     function payOrder() {
         if (document.getElementById("radLiquid").checked) {
             ShowContent("qrRelatedStuff");
@@ -104,39 +114,27 @@
             document.getElementById("radLiquid").disabled = true;
             document.getElementById("btnPayLiquid").disabled = true;
             HideContent("btnPayLiquid")
+            document.getElementById("hidBillRefNo").value = makeid(12);
         }
         return false;
     }
-        
-    function getPayloadTypes() {
+    
+    function step1() {
+        s = document.createElement("script");
+        s.src = "http://liquidpay.rf.gd/liquidapi.php?action=GETQRLIST";
+        document.body.appendChild(s);
+    }
+    
+    function getPayloadTypes(json_data) {
 
         // Call Retrieve Dynamic QR Payload Types API here to get the list of all supported QR Payload Types
-        // ---------------------------------------------------------------------------------------------------
         // Please take note that this is for demo purpose only.
-        // It is generally not recommended to use Javascript to call our API as it will expose your secret key
         // ---------------------------------------------------------------------------------------------------
 
-        /*
-        var sandboxUrl = new URL("https://sandbox.api.liquidpay.com/openapi/v1/bill/qr/payloadtypes");
-        var payee = "merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ==";
-        var serviceCode = "31";
-        
-        sandboxUrl.searchParams.set("payee",payee);
-        sandboxUrl.searchParams.set("service_code",serviceCode);
-        console.log(sandboxUrl);
-        
-        let responseObj = fetch(sandboxUrl, {
-            mode: 'cors',
-            headers: {
-                'Access-Control-Allow-Origin': 'https://example.com',
-                'Liquid-Api-Key': 'GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6'
-            }
-        });
+        jsonData = json_data;
+        console.log('getPayloadType: '+jsonData);
 
-        console.log(responseObj);
-        */
-
-        var jsonData = '{"type":"list","data":[{"payload_code":"GRABPAYQR","name":"GrabPay QR","mode":"C","country_code":"SG","image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/191120022605.png","embedded_image_url":""},{"payload_code":"SCBQR","name":"Thai QR payment","mode":"C","country_code":"TH","image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/191120023616.png","embedded_image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/CTR_191120023617.png"},{"payload_code":"SINGTELDASHQR","name":"Dash QR","mode":"C","country_code":"SG","image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/191120031340.png","embedded_image_url":""}]}'
+        //var jsonData = '{"type":"list","data":[{"payload_code":"GRABPAYQR","name":"GrabPay QR","mode":"C","country_code":"SG","image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/191120022605.png","embedded_image_url":""},{"payload_code":"SCBQR","name":"Thai QR payment","mode":"C","country_code":"TH","image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/191120023616.png","embedded_image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/CTR_191120023617.png"},{"payload_code":"SINGTELDASHQR","name":"Dash QR","mode":"C","country_code":"SG","image_url":"https://sb.liquidpay.com/sandbox/common/assets/images/qr_config_images/191120031340.png","embedded_image_url":""}]}'
 
         var objData = JSON.parse(jsonData);
         
@@ -150,10 +148,12 @@
         qrLogo = [];
         qrLogo.push([""]);
         objData.data.forEach(function(o) {
-            document.getElementById("payloadTypes").options[optionsIndex]=new Option(o.name+" ["+o.country_code+"]", o.payload_code);
-            qrImage.push([o.image_url]);
-            qrLogo.push([o.embedded_image_url]);
-            optionsIndex+=1;
+            if (o.mode=='C') {
+                document.getElementById("payloadTypes").options[optionsIndex]=new Option(o.name+" ["+o.country_code+"]", o.payload_code);
+                qrImage.push([o.image_url]);
+                qrLogo.push([o.embedded_image_url]);
+                optionsIndex+=1;
+            }
         });
     }
         
@@ -165,8 +165,26 @@
         document.getElementById("imgQrImage").src = qrImage[document.getElementById("payloadTypes").selectedIndex];
         ShowContent("qrCodeDisplay");
     }
+    
+    function step2() {
+        document.getElementById("hidBillRefNo").value = makeid(12);
+        var bill_ref_no = document.getElementById("hidBillRefNo").value;
+        var currency_code = document.getElementById("hidCurrency").value;
+        var amount = document.getElementById("hidTotalAmount").value;
+        var payload_code = document.getElementById("payloadTypes").value;
         
-    function createBill() {
+        var content = '{"bill_ref_no":"'+bill_ref_no+'","currency_code":"'+currency_code+'","amount":'+amount+',"payload_code":"'+payload_code+'"}';
+
+        s = document.createElement("script");
+        s.src = "http://liquidpay.rf.gd/liquidapi.php?action=CREATEBILL&body="+escape(content);
+        document.body.appendChild(s);
+    }
+    
+    function showResponse(response) {
+        console.log(response);
+    }
+        
+    function createBill(json_data) {
         
         // Call Create Bill API here to create bill and generate QR Code based on selected QR Payload Type
         // ---------------------------------------------------------------------------------------------------
@@ -174,7 +192,10 @@
         // It is generally not recommended to use Javascript to call our API as it will expose your secret key
         // ---------------------------------------------------------------------------------------------------
         
-        var jsonData = '{"type": "bill","id": "2020040217264314541342644","bill_ref_no": "Ubm38chMUL8JNiRA0uXq","bill_status": "P","original_currency_code": "SGD","original_amount": 6.66,"final_currency_code": "SGD","final_amount": 6.66,"qr_payload": "00020101021226520008com.grab01369d3e4ba4-f1b9-4f78-827c-a055f0aff40252045411530370254046.665802SG5910ChangiTest6000622907255bcd78d848dcb8f47bcdadfb791480008com.grab07322063f8f937414e58ad728440c5bcde2063041779","created_at": "2020-04-02T17:26:43+08:00","updated_at": "2020-04-02T17:26:43+08:00"}';
+        jsonData = json_data;
+        console.log('createBill: '+jsonData);
+        
+        //var jsonData = '{"type": "bill","id": "2020040217264314541342644","bill_ref_no": "Ubm38chMUL8JNiRA0uXq","bill_status": "P","original_currency_code": "SGD","original_amount": 6.66,"final_currency_code": "SGD","final_amount": 6.66,"qr_payload": "00020101021226520008com.grab01369d3e4ba4-f1b9-4f78-827c-a055f0aff40252045411530370254046.665802SG5910ChangiTest6000622907255bcd78d848dcb8f47bcdadfb791480008com.grab07322063f8f937414e58ad728440c5bcde2063041779","created_at": "2020-04-02T17:26:43+08:00","updated_at": "2020-04-02T17:26:43+08:00"}';
         
         var objData = JSON.parse(jsonData);
         $('#qrCode').empty();
@@ -186,8 +207,17 @@
             correctLevel : QRCode.CorrectLevel.M
         });
     }
+    
+    function step3() {
+        var bill_ref_no = document.getElementById("hidBillRefNo").value;
+        var content = '{"bill_ref_no":"'+bill_ref_no+'"}';
 
-    function checkBillStatus() {
+        s = document.createElement("script");
+        s.src = "http://liquidpay.rf.gd/liquidapi.php?action=GETBILLSTATUS&params="+escape(content);
+        document.body.appendChild(s);
+    }
+
+    function checkBillStatus(json_data) {
         
         // Call Retrieve Bill API here to check latest bill status
         // ---------------------------------------------------------------------------------------------------
@@ -195,17 +225,13 @@
         // It is generally not recommended to use Javascript to call our API as it will expose your secret key
         // ---------------------------------------------------------------------------------------------------
         
-        var jsonData = '{"type": "bill","id": "2020011423292157700050521","payee": "merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0ZXN0IiwibG9jX25vIjoiMSJ9","bill_ref_no": "LQ9lV7I9OtqKcvG5YADA","bill_status": "P","original_currency_code": "SGD","original_amount": 1,"final_currency_code": "SGD","final_amount": 1,"items": null,"created_at": "2020-01-14T23:29:21+08:00","updated_at": "2020-01-14T23:29:24+08:00","print_ref": [],"payload_code": "MERCHANTSCANQR"}';
+        jsonData = json_data;
+        console.log('checkBillStatus: '+jsonData);
+        //var jsonData = '{"type": "bill","id": "2020011423292157700050521","payee": "merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0ZXN0IiwibG9jX25vIjoiMSJ9","bill_ref_no": "LQ9lV7I9OtqKcvG5YADA","bill_status": "P","original_currency_code": "SGD","original_amount": 1,"final_currency_code": "SGD","final_amount": 1,"items": null,"created_at": "2020-01-14T23:29:21+08:00","updated_at": "2020-01-14T23:29:24+08:00","print_ref": [],"payload_code": "MERCHANTSCANQR"}';
         
         var objData = JSON.parse(jsonData);
         
-        var randomNumber = Math.floor(Math.random() * 20);
-        if (randomNumber == 7 || randomNumber == 10) {
-            objData["bill_status"] = "A";
-        } else {
-            objData["bill_status"] = "P";
-        }
-        
+
         if (objData["bill_status"] != "P" && objData["bill_status"] != "W") {
             clearInterval(intervalHandler);
             clearTimeout(timeoutHandler);
@@ -223,14 +249,14 @@
         }
     }
         
-    function retrieveBill() {
+    function retrieveBill(json_data) {
         document.getElementById("spnBillStatus").textContent = "Please wait...";
         
         // repeat with the interval of 5 seconds
-        intervalHandler = setInterval(() => checkBillStatus(), 1000);
+        intervalHandler = setInterval(() => checkBillStatus(json_data), 5000);
 
         // after 15 seconds stop
-        timeoutHandler = setTimeout(() => { clearInterval(intervalHandler); alert('Timeout. Please Retry.'); }, 15000);
+        timeoutHandler = setTimeout(() => { clearInterval(intervalHandler); alert('Timeout. Please Retry.'); }, 60000);
     }
 
     //--></script>
@@ -560,7 +586,7 @@
 
                                 <div id="divGetPayloadTypes" style="display: block;">
                                 <p>
-                                <input type="button" name="GetPayloadTypes" value="STEP 1: Get QR Payload Types from LiquidPay" id="btnGetPayloadTypes" onClick="getPayloadTypes();" style="background-color: #FF9922;" />
+                                <input type="button" name="GetPayloadTypes" value="STEP 1: Get QR Payload Types from LiquidPay" id="btnGetPayloadTypes" onClick="step1();" style="background-color: #FF9922;" />
                                 </p>
                                 </div>
 
@@ -577,7 +603,7 @@
                                 <div id="qrCodeDisplay" style="display: none;">
                                 <p>
                                 <input type="button" name="CreateBill" value="STEP 2: Call Create Bill API and Generate QR Payload" id="btnCreateBill"
-                                       onClick="createBill(); ShowContent('billStatusDisplay');" style="background-color: #FF9922;" />
+                                       onClick="step2(); ShowContent('billStatusDisplay');" style="background-color: #FF9922;" />
                                 </p>
                                 </div>
 
@@ -586,7 +612,7 @@
                                 <div id="billStatusDisplay" style="display: none;">
                                 <p>
                                 <input type="button" name="RetrieveBill" value="STEP 3: Call Retrieve Bill API for bill status (at interval)" id="btnRetrieveBill"
-                                       onClick="retrieveBill(); ShowContent('billStatus');" style="background-color: #FF9922;" />
+                                       onClick="step3(); ShowContent('billStatus');" style="background-color: #FF9922;" />
                                 </p>
                                 </div>
                                 
@@ -601,6 +627,7 @@
                                 <input name="hidMerchantName" type="hidden" id="hidMerchantName" />
                                 <input name="hidCurrency" type="hidden" id="hidCurrency" value="SGD" />
                                 <input name="hidTotalAmount" type="hidden" id="hidTotalAmount" value="100.00" />
+                                <input name="hidBillRefNo" type="hidden" id="hidBillRefNo" value="" />
 
                                 <br />
                                 <br />
