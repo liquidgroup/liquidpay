@@ -11,14 +11,13 @@ info:
     <p>All responses come in standard JSON.</p>
     <p><b>Payment Flow Description</b></p>
     <p><ol>
-    <li value="1">Consumer checkout of eCommerce website via PC browser and select “xnap” payment</li>
-    <li>Merchant eCommerce host requested for a list of supported QR payload type from Liquid using "Retrieve Supported Dynamic QR Payload Types API"</li>
-    <li>Merchant website list down all supported payload type for consumer to select</li>
+    <li value="1">Consumer checkout of eCommerce website via PC browser and select “xnap” payment.</li>
+    <li>Merchant website display the list of all supported QR scheme options for consumer to choose.</li>
     <li>Merchant eCommerce host requested “selected” QR scheme QR code from Liquid using “Create Bill API”.</li>
-    <li>Merchant website render and display selected QR code on the consumer PC display screen based on the QR payload provided</li>
-    <li>Consumer scan the QR code using mobile App and confirm payment</li>
-    <li>Issuer host authorize payment and send payment notification to Liquid. Liquid update the payment status on its system</li>
-    <li>Merchant eCommerce host poll Liquid for payment status using “Retrieve Bill API”. Liquid returned the payment status to merchant host</li>
+    <li>Merchant website render and display selected QR code on the consumer PC display screen based on the QR payload provided.</li>
+    <li>Consumer scan the QR code using mobile App and confirm payment.</li>
+    <li>Issuer host authorize payment and send payment notification to Liquid. Liquid update the payment status on its system.</li>
+    <li>Merchant eCommerce host poll Liquid for payment status using “Retrieve Bill API”. Liquid returned the payment status to merchant host.</li>
     <li>Merchant host update payment status to the consumer web browser. Payment completed.</li>
     </ol></p>
     <p><b>Signature Mechanism</b></p>
@@ -44,19 +43,17 @@ info:
     <p><pre>
       {
         "payee":"payee_i&ent|fi$r",
-        "service_type":"SP",
         "merchant_ref_no":"12345679",
         "currency":"",
         "amount":25.10
       }
     </pre></p>
     <p>nonce = 5897884565425</p>
-    <p>sign = sha512(AMOUNT=25.10&MERCHANT_REF_NO=12345679&PAYEE=PAYEE_I%26ENT%7CFI%24R&NONCE=5897884565425&SECRET=secret_value)</p>
+    <p>sign_value = sha512(AMOUNT=25.10&MERCHANT_REF_NO=12345679&PAYEE=PAYEE_I%26ENT%7CFI%24R&NONCE=5897884565425&SECRET=secret_value)</p>
     <p>Valid Request with Signature</p>
     <p><pre>
       {
         "payee":"payee_i&ent|fi$r",
-        "service_type":"SP",
         "merchant_ref_no":"12345679",
         "currency":"",
         "amount":25.10,
@@ -65,7 +62,7 @@ info:
       }
     </pre></p>
     <p><b>Demo</b></p>
-    <p>Demo page on how to implement this API to enable XNAP payment acceptance is available on this <a href="https://liquidgroup.github.io/liquidpay/ecommerce/demo/">link</a>
+    <p>Demo page on how to implement this API to enable XNAP payment acceptance is available on this <a href="demo/">link</a>
     </p>
 
 servers:
@@ -75,9 +72,10 @@ servers:
     description: production environment
 paths:
 
-  /v2/bill/qr/payloadtype:
+  /v1/bill/qr/payloadtype:
     get:
-      summary: 'Retrieve a list of supported dynamic QR payload types'
+      summary: 'Retrieve a list of supported dynamic QR payload types. Merchant system only need to perform this API call once daily
+and cache it in its system.'
       tags:
         - Retrieve Supported Dynamic QR Payload Types
       parameters:
@@ -95,22 +93,15 @@ paths:
           required: true
           schema:
             type: string
-        - in: query
-          name: service_code
-          description: Value set to “31” for eCommerce
-          example: "31"
-          required: true
-          schema:
-            type: string
       x-code-samples:
         - lang: 'Curl'
           source: |
             curl -X GET \
-            'https://sandbox.api.liquidpay.com/openapi/v2/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31' \
+            'https://sandbox.api.liquidpay.com/openapi/v2/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D' \
             -H 'liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6'
         - lang: 'C#'
           source: |
-            var client = new RestClient("https://sandbox.api.liquidpay.com/openapi/v2/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31");
+            var client = new RestClient("https://sandbox.api.liquidpay.com/openapi/v2/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D");
             var request = new RestRequest(Method.GET);
             request.AddHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6");
             IRestResponse response = client.Execute(request);
@@ -119,7 +110,7 @@ paths:
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://sandbox.api.liquidpay.com/openapi/v2/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31")
+              .url("https://sandbox.api.liquidpay.com/openapi/v2/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D")
               .get()
               .addHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6")
               .build();
@@ -132,7 +123,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://sandbox.api.liquidpay.com/openapi/v2/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31",
+              CURLOPT_URL => "https://sandbox.api.liquidpay.com/openapi/v2/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -164,7 +155,7 @@ paths:
               'liquid-api-key': "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6"
             }
 
-            conn.request("GET", "/openapi/v2/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D&service_code=31", headers=headers)
+            conn.request("GET", "/openapi/v2/bill/qr/payloadtypes?payee=merchant_eyJtZXJjaGFudF9pZCI6ImNvY29hdHJlZXRlc3QiLCJvdXRsZXRfaWQiOiJjb2NvYXRyZWV0MSIsImxvY19ubyI6IjEifQ%3D%3D", headers=headers)
 
             res = conn.getresponse()
             data = res.read()
@@ -178,7 +169,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/list_of_payload_types'
 
-  /v2/bill/consumer/scan:
+  /v1/bill/consumer/scan:
     post:
       summary: 'Create a bill which will in turn generate a dynamic QR for merchant to present to accept payment'
       tags:
@@ -407,258 +398,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/billing_status'
-
-  /v1/bill/{id}/cancel:
-    post:
-      summary: 'Cancel a bill payment request in progress on Liquid Platform'
-      tags:
-        - Cancel Bill
-      parameters:
-        - in: header
-          name: Liquid-Api-Key
-          example: "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6"
-          description: The API key assigned during enrollment
-          schema:
-            type: string
-          required: true
-        - in: header
-          name: Idempotency-Key
-          example: "f6277320-6d0c-436a-b724-14418a54814d"
-          description: Used for idempotent request
-          schema:
-            type: string
-        - in: path
-          name: id
-          example: "2020040217264314541342644"
-          description: An unique identifier of bill generated by Liquid system. (NOT merchant bill_ref_no)
-          required: true
-          schema:
-            type: string
-      x-code-samples:
-        - lang: 'Curl'
-          source: |
-            curl -X POST \
-              https://sandbox.api.liquidpay.com/openapi/v1/bill/2020040217264314541342644/cancel \
-              -H 'content-type: application/json' \
-              -H 'idempotency-key: f6277320-6d0c-436a-b724-14418a54814d' \
-              -H 'liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6' \
-              -d '{"reason": "Test cancelling","nonce": "1833079681","sign": ""}'
-        - lang: 'C#'
-          source: |
-            var client = new RestClient("https://sandbox.api.liquidpay.com/openapi/v1/bill/2020040217264314541342644/cancel");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("idempotency-key", "f6277320-6d0c-436a-b724-14418a54814d");
-            request.AddHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6");
-            request.AddHeader("content-type", "application/json");
-            request.AddParameter("application/json", "{\n\t\"reason\": \"Test cancelling\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}", ParameterType.RequestBody);
-            IRestResponse response = client.Execute(request);
-        - lang: 'Java'
-          source: |
-            OkHttpClient client = new OkHttpClient();
-
-            MediaType mediaType = MediaType.parse("application/json");
-            RequestBody body = RequestBody.create(mediaType, "{\n\t\"reason\": \"Test cancelling\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}");
-            Request request = new Request.Builder()
-              .url("https://sandbox.api.liquidpay.com/openapi/v1/bill/2020040217264314541342644/cancel")
-              .post(body)
-              .addHeader("content-type", "application/json")
-              .addHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6")
-              .addHeader("idempotency-key", "f6277320-6d0c-436a-b724-14418a54814d")
-              .build();
-
-            Response response = client.newCall(request).execute();
-        - lang: 'PHP'
-          source: |
-            <?php
-
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://sandbox.api.liquidpay.com/openapi/v1/bill/2020040217264314541342644/cancel",
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_ENCODING => "",
-              CURLOPT_MAXREDIRS => 10,
-              CURLOPT_TIMEOUT => 30,
-              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-              CURLOPT_CUSTOMREQUEST => "POST",
-              CURLOPT_POSTFIELDS => "{\n\t\"reason\": \"Test cancelling\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}",
-              CURLOPT_HTTPHEADER => array(
-                "content-type: application/json",
-                "idempotency-key: f6277320-6d0c-436a-b724-14418a54814d",
-                "liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6",
-              ),
-            ));
-
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-
-            curl_close($curl);
-
-            if ($err) {
-              echo "cURL Error #:" . $err;
-            } else {
-              echo $response;
-            }
-        - lang: 'Python'
-          source: |
-            import http.client
-
-            conn = http.client.HTTPSConnection("sandbox.api.liquidpay.com")
-
-            payload = "{\n\t\"reason\": \"Test cancelling\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}"
-
-            headers = {
-              'content-type': "application/json",
-              'liquid-api-key': "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6",
-              'idempotency-key': "f6277320-6d0c-436a-b724-14418a54814d"
-            }
-
-            conn.request("POST", "/openapi/v1/bill/2020040217264314541342644/cancel", payload, headers)
-
-            res = conn.getresponse()
-            data = res.read()
-
-            print(data.decode("utf-8"))
-      requestBody:
-        description: Cancellation Details
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/cancel_details'
-      responses:
-        '200':
-          description: Cancellation Result
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/action_status'
-
-  /v2/payments/{id}/void:
-    post:
-      summary: 'Void a completed and unsettled transaction'
-      tags:
-        - Void Payment
-      parameters:
-        - in: header
-          name: Liquid-Api-Key
-          example: "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6"
-          description: The API key assigned during enrollment
-          schema:
-            type: string
-          required: true
-        - in: header
-          name: Idempotency-Key
-          example: "053e1471-9843-4c8a-a66f-b50111dd8907"
-          description: Used for idempotent request
-          schema:
-            type: string
-        - in: path
-          name: id
-          example: "2020040217264314541342644"
-          description: An unique identifier of bill generated by Liquid system. (NOT merchant bill_ref_no)
-          required: true
-          schema:
-            type: string
-      x-code-samples:
-        - lang: 'Curl'
-          source: |
-            curl -X POST \
-              https://sandbox.api.liquidpay.com/openapi/v2/payments/2020040217264314541342644/void \
-              -H 'content-type: application/json' \
-              -H 'idempotency-key: 053e1471-9843-4c8a-a66f-b50111dd8907' \
-              -H 'liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6' \
-              -d '{"amount": "1.00","currency_code": "SGD","reason": "Test void for Butleric","nonce": "1833079681","sign": ""}'
-        - lang: 'C#'
-          source: |
-            var client = new RestClient("https://sandbox.api.liquidpay.com/openapi/v2/payments/2020040217264314541342644/void");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("idempotency-key", "053e1471-9843-4c8a-a66f-b50111dd8907");
-            request.AddHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6");
-            request.AddHeader("content-type", "application/json");
-            request.AddParameter("application/json", "{\n\t\"amount\": \"1.00\",\n\t\"currency_code\": \"SGD\",\n\t\"reason\": \"Test void for Butleric\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}", ParameterType.RequestBody);
-            IRestResponse response = client.Execute(request);
-        - lang: 'Java'
-          source: |
-            OkHttpClient client = new OkHttpClient();
-
-            MediaType mediaType = MediaType.parse("application/json");
-            RequestBody body = RequestBody.create(mediaType, "{\n\t\"amount\": \"1.00\",\n\t\"currency_code\": \"SGD\",\n\t\"reason\": \"Test void for Butleric\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}");
-            Request request = new Request.Builder()
-              .url("https://sandbox.api.liquidpay.com/openapi/v2/payments/2020040217264314541342644/void")
-              .post(body)
-              .addHeader("content-type", "application/json")
-              .addHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6")
-              .addHeader("idempotency-key", "053e1471-9843-4c8a-a66f-b50111dd8907")
-              .addHeader("cache-control", "no-cache")
-              .addHeader("postman-token", "6a194364-e1a3-58be-1d9d-72a8228aeba2")
-              .build();
-
-            Response response = client.newCall(request).execute();
-        - lang: 'PHP'
-          source: |
-            <?php
-
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://sandbox.api.liquidpay.com/openapi/v2/payments/2020040217264314541342644/void",
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_ENCODING => "",
-              CURLOPT_MAXREDIRS => 10,
-              CURLOPT_TIMEOUT => 30,
-              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-              CURLOPT_CUSTOMREQUEST => "POST",
-              CURLOPT_POSTFIELDS => "{\n\t\"amount\": \"1.00\",\n\t\"currency_code\": \"SGD\",\n\t\"reason\": \"Test void for Butleric\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}",
-              CURLOPT_HTTPHEADER => array(
-                "content-type: application/json",
-                "idempotency-key: 053e1471-9843-4c8a-a66f-b50111dd8907",
-                "liquid-api-key: GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6"
-              ),
-            ));
-
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-
-            curl_close($curl);
-
-            if ($err) {
-              echo "cURL Error #:" . $err;
-            } else {
-              echo $response;
-            }
-        - lang: 'Python'
-          source: |
-            import http.client
-
-            conn = http.client.HTTPSConnection("sandbox.api.liquidpay.com")
-
-            payload = "{\n\t\"amount\": \"1.00\",\n\t\"currency_code\": \"SGD\",\n\t\"reason\": \"Test void for Butleric\",\n\t\"nonce\": \"1833079681\",\n\t\"sign\": \"\"\n}"
-
-            headers = {
-              'content-type': "application/json",
-              'liquid-api-key': "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6",
-              'idempotency-key': "053e1471-9843-4c8a-a66f-b50111dd8907",
-            }
-
-            conn.request("POST", "/openapi/v2/payments/2020040217264314541342644/void", payload, headers)
-
-            res = conn.getresponse()
-            data = res.read()
-
-            print(data.decode("utf-8"))
-      requestBody:
-        description: Void Details
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/void_details'
-      responses:
-        '200':
-          description: Void Result
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/action_status'
 
   /v2/payments/{id}/refund:
     post:
@@ -1054,54 +793,6 @@ components:
         voucher_discount_value:
           type: string
           description: Discount amount
-    cancel_details:
-      type: object
-      required:
-        - reason
-        - nonce
-        - sign
-      properties:
-        reason:
-          type: string
-          example: "testing"
-          description: Reason to cancel the bill
-        nonce:
-          type: string
-          example: "1638178267"
-          description: Please refer to Signature Mechanism
-        sign:
-          type: string
-          example: "<signature hash>"
-          description: Please refer to Signature Mechanism
-    void_details:
-      type: object
-      required:
-        - reason
-        - currency_code
-        - amount
-        - nonce
-        - sign
-      properties:
-        reason:
-          type: string
-          example: "testing"
-          description: Reason to cancel the bill
-        currency_code:
-          type: string
-          example: "SGD"
-          description: Currency code of the original amount
-        amount:
-          type: number
-          example: 1.1
-          description: Amount of the bill
-        nonce:
-          type: string
-          example: "1433143893"
-          description: Please refer to Signature Mechanism
-        sign:
-          type: string
-          example: "<signature hash>"
-          description: Please refer to Signature Mechanism
     refund_details:
       type: object
       required:
