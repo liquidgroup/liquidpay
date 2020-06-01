@@ -68,7 +68,7 @@ info:
 servers:
   - url: 'https://sandbox.api.liquidpay.com/openapi'
     description: sandbox environment
-  - url: 'https://api.liquidpay.com/openapi'
+  - url: 'https://gateway.api.liquidpay.com/openapi'
     description: production environment
 paths:
 
