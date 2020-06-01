@@ -200,7 +200,7 @@ and cache it in its system.'
                 "amount": 1.1,
                 "bill_ref_no": "3BN2mOhaqXco14H4MTfO",
                 "currency_code": "SGD",
-                "service_code": "31",
+                "service_type": "PAE",
                 "items": [
                   {
                     "item_name": "itemName_1",
@@ -221,14 +221,14 @@ and cache it in its system.'
             request.AddHeader("idempotency-key", "2b88f38b-f8fb-4347-b33d-b4c7a44d2691");
             request.AddHeader("liquid-api-key", "GPa4uz2bCdiZcMQD1ftwCVhPk7E3KMe6");
             request.AddHeader("content-type", "application/json");
-            request.AddParameter("application/json", "{\n  \"amount\": 1.1,\n  \"bill_ref_no\": \"3BN2mOhaqXco14H4MTfO\",\n  \"currency_code\": \"SGD\",\n  \"service_code\": \"31\",\n  \"items\": [\n    {\n      \"item_name\": \"itemName_1\",\n      \"item_number\": \"item+1\",\n      \"item_quantity\": 1,\n      \"item_unit_price\": 1.1\n    }\n  ],\n  \"payee\": \"merchant_eyJtZXJjaGFudF9pZCI6Im5lY18xIiwib3V0bGV0X2lkIjoibmVjX29fMSIsImxvY19ubyI6IjEifQ==\",\n  \"payload_code\": \"GRABQR\",\n  \"nonce\": \"1833079681\",\n  \"sign\": \"\"\n}", ParameterType.RequestBody);
+            request.AddParameter("application/json", "{\n  \"amount\": 1.1,\n  \"bill_ref_no\": \"3BN2mOhaqXco14H4MTfO\",\n  \"currency_code\": \"SGD\",\n  \"service_type\": \"PAE\",\n  \"items\": [\n    {\n      \"item_name\": \"itemName_1\",\n      \"item_number\": \"item+1\",\n      \"item_quantity\": 1,\n      \"item_unit_price\": 1.1\n    }\n  ],\n  \"payee\": \"merchant_eyJtZXJjaGFudF9pZCI6Im5lY18xIiwib3V0bGV0X2lkIjoibmVjX29fMSIsImxvY19ubyI6IjEifQ==\",\n  \"payload_code\": \"GRABQR\",\n  \"nonce\": \"1833079681\",\n  \"sign\": \"\"\n}", ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
         - lang: 'Java'
           source: |
             OkHttpClient client = new OkHttpClient();
 
             MediaType mediaType = MediaType.parse("application/json");
-            RequestBody body = RequestBody.create(mediaType, "{\n  \"amount\": 1.1,\n  \"bill_ref_no\": \"3BN2mOhaqXco14H4MTfO\",\n  \"currency_code\": \"SGD\",\n  \"service_code\": \"31\",\n  \"items\": [\n    {\n      \"item_name\": \"itemName_1\",\n      \"item_number\": \"item+1\",\n      \"item_quantity\": 1,\n      \"item_unit_price\": 1.1\n    }\n  ],\n  \"payee\": \"merchant_eyJtZXJjaGFudF9pZCI6Im5lY18xIiwib3V0bGV0X2lkIjoibmVjX29fMSIsImxvY19ubyI6IjEifQ==\",\n  \"payload_code\": \"GRABQR\",\n  \"nonce\": \"1833079681\",\n  \"sign\": \"\"\n}");
+            RequestBody body = RequestBody.create(mediaType, "{\n  \"amount\": 1.1,\n  \"bill_ref_no\": \"3BN2mOhaqXco14H4MTfO\",\n  \"currency_code\": \"SGD\",\n  \"service_type\": \"PAE\",\n  \"items\": [\n    {\n      \"item_name\": \"itemName_1\",\n      \"item_number\": \"item+1\",\n      \"item_quantity\": 1,\n      \"item_unit_price\": 1.1\n    }\n  ],\n  \"payee\": \"merchant_eyJtZXJjaGFudF9pZCI6Im5lY18xIiwib3V0bGV0X2lkIjoibmVjX29fMSIsImxvY19ubyI6IjEifQ==\",\n  \"payload_code\": \"GRABQR\",\n  \"nonce\": \"1833079681\",\n  \"sign\": \"\"\n}");
             Request request = new Request.Builder()
               .url("https://sandbox.api.liquidpay.com/openapi/v2/bill/consumer/scan")
               .post(body)
@@ -252,7 +252,7 @@ and cache it in its system.'
                 CURLOPT_TIMEOUT => 30,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS => "{\n  \"amount\": 1.1,\n  \"bill_ref_no\": \"3BN2mOhaqXco14H4MTfO\",\n  \"currency_code\": \"SGD\",\n  \"service_code\": \"31\",\n  \"items\": [\n    {\n      \"item_name\": \"itemName_1\",\n      \"item_number\": \"item+1\",\n      \"item_quantity\": 1,\n      \"item_unit_price\": 1.1\n    }\n  ],\n  \"payee\": \"merchant_eyJtZXJjaGFudF9pZCI6Im5lY18xIiwib3V0bGV0X2lkIjoibmVjX29fMSIsImxvY19ubyI6IjEifQ==\",\n  \"payload_code\": \"GRABQR\",\n  \"nonce\": \"1833079681\",\n  \"sign\": \"\"\n}",
+                CURLOPT_POSTFIELDS => "{\n  \"amount\": 1.1,\n  \"bill_ref_no\": \"3BN2mOhaqXco14H4MTfO\",\n  \"currency_code\": \"SGD\",\n  \"service_type\": \"PAE\",\n  \"items\": [\n    {\n      \"item_name\": \"itemName_1\",\n      \"item_number\": \"item+1\",\n      \"item_quantity\": 1,\n      \"item_unit_price\": 1.1\n    }\n  ],\n  \"payee\": \"merchant_eyJtZXJjaGFudF9pZCI6Im5lY18xIiwib3V0bGV0X2lkIjoibmVjX29fMSIsImxvY19ubyI6IjEifQ==\",\n  \"payload_code\": \"GRABQR\",\n  \"nonce\": \"1833079681\",\n  \"sign\": \"\"\n}",
                 CURLOPT_HTTPHEADER => array(
                   "content-type: application/json",
                   "idempotency-key: 2b88f38b-f8fb-4347-b33d-b4c7a44d2691",
@@ -570,7 +570,7 @@ components:
       required:
         - payee
         - bill_ref_no
-        - service_code
+        - service_type
         - currency_code
         - amount
         - payload_code
@@ -585,10 +585,10 @@ components:
           type: string
           example: rMT0FeVpmDpuVulDnUQa
           description: An unique bill reference no. generated by the merchant system
-        service_code:
+        service_type:
           type: string
-          example: "31"
-          description: Value set to “31” for ecommerce merchant
+          example: "PAE"
+          description: Value set to “PAE” for ecommerce merchant
         currency_code:
           type: string
           example: SGD
@@ -644,7 +644,7 @@ components:
         - type
         - id
         - bill_ref_no
-        - service_code
+        - service_type
         - bill_status
         - original_currency_code
         - original_amount
@@ -666,10 +666,10 @@ components:
           type: string
           example: rMT0FeVpmDpuVulDnUQa
           description: An unique Identifier of bill generated by merchant
-        service_code:
+        service_type:
           type: string
-          example: "31"
-          description: Echo from request message. Value = “31” for eCommerce merchant
+          example: "PAE"
+          description: Echo from request message. Value = “PAE” for eCommerce merchant
         bill_status:
           type: string
           example: P
@@ -708,7 +708,7 @@ components:
         - type
         - id
         - bill_ref_no
-        - service_code
+        - service_type
         - bill_status
         - original_currency_code
         - original_amount
@@ -729,10 +729,10 @@ components:
           type: string
           example: rMT0FeVpmDpuVulDnUQa
           description: An unique Identifier of bill generated by merchant
-        service_code:
+        service_type:
           type: string
-          example: "31"
-          description: Echo from request message. Value = “31” for eCommerce merchant
+          example: "PAE"
+          description: Echo from request message. Value = “PAE” for eCommerce merchant
         bill_status:
           type: string
           example: A
